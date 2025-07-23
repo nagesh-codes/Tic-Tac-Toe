@@ -1,0 +1,377 @@
+::-webkit-scrollbar {
+    display: none;
+}
+
+.home-container {
+    background: linear-gradient(135deg, #FF69B4, #8A2BE2);
+    width: 100vw;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+}
+
+.home-container .hero-section {
+    text-align: center;
+    padding: 60px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    margin-bottom: 40px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    animation: fadeInDown 1s ease-out forwards;
+}
+
+.home-container .main-heading {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 4em;
+    margin-bottom: 20px;
+    color: #fff;
+    text-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+    line-height: 1.2;
+    animation: textGlow 2s infinite alternate;
+    text-align: center;
+}
+
+.home-container .hero-description {
+    font-size: 1.3em;
+    color: #ffe4e1;
+    max-width: 800px;
+    margin: 0 auto 10px auto;
+    line-height: 1.6;
+}
+
+.home-container .hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.home-container .play-now-btn,
+.home-container .create-room-btn {
+    display: inline-block;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 1.2em;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+}
+
+.home-container .play-now-btn {
+    background: linear-gradient(45deg, #FFB6C1 0%, #FF69B4 100%);
+    color: #fff;
+}
+
+.home-container .play-now-btn:hover {
+    background: linear-gradient(45deg, #FF69B4 0%, #FFB6C1 100%);
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(255, 105, 180, 0.6);
+}
+
+.home-container .create-room-btn {
+    background: linear-gradient(45deg, #feb47b 0%, #ff7e5f 100%);
+    color: #fff;
+}
+
+.home-container .create-room-btn:hover {
+    background: linear-gradient(45deg, #ff7e5f 0%, #feb47b 100%);
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(255, 126, 95, 0.6);
+}
+
+
+.home-container .about-section,
+.home-container .rules-section {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(8px);
+    width: 100%;
+    animation: fadeInDown 1s ease-out forwards;
+}
+
+.home-container .section-heading {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 2.8em;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #fff;
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.home-container .section-description {
+    font-size: 1.1em;
+    color: #e0e0e0;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto 40px auto;
+    line-height: 1.6;
+}
+
+.home-container .theme-boxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+    animation: fadeInDown 1s ease-out forwards;
+}
+
+.home-container .theme-box {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.home-container .theme-box:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+}
+
+.home-container .theme-box h3 {
+    font-size: 1.6em;
+    color: #e8e1dc;
+    margin-bottom: 15px;
+}
+
+.home-container .theme-box p {
+    font-size: 0.95em;
+    color: #f0f0f0;
+    line-height: 1.5;
+}
+
+.home-container .pink-gradient {
+    background: linear-gradient(135deg, #FFB6C1 0%, #FF69B4 100%);
+    animation: pulse 2s infinite alternate;
+}
+
+.home-container .animated-elements {
+    background: linear-gradient(135deg, #FFC0CB 0%, #FF8C94 100%);
+    animation-delay: 0.5s;
+    animation: pulse 2s infinite alternate;
+}
+
+.home-container .responsive-design {
+    background: linear-gradient(135deg, #eebf97 0%, #FFB6C1 100%);
+    animation-delay: 1s;
+    animation: pulse 2s infinite alternate;
+}
+
+
+.home-container .rules-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.home-container .rule-item {
+    background: rgba(255, 255, 255, 0.12);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.home-container .rule-item:hover {
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.home-container .rule-item h3 {
+    font-size: 1.4em;
+    color: #FFDAB9;
+    margin-bottom: 10px;
+}
+
+.home-container .rule-item p {
+    font-size: 0.9em;
+    color: #e8e8e8;
+    line-height: 1.5;
+}
+
+/* Footer */
+.home-container .home-footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 10px;
+    color: #f0f0f0;
+    font-size: 0.9em;
+    width: 100%;
+}
+
+.home-container .play-heading {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 20px;
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    animation: fadeInDown 1s ease-out forwards;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
+@keyframes textGlow {
+    0% {
+        text-shadow: 0 0 5px #fff, 0 0 10px #FF69B4;
+    }
+
+    100% {
+        text-shadow: 0 0 10px #fff, 0 0 20px #FFDAB9;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3), 0 0 15px #FF69B4;
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+}
+
+
+@media (max-width: 900px) {
+    .home-container .main-heading {
+        font-size: 3em;
+        word-wrap: wrap;
+    }
+
+    .home-container .hero-description {
+        font-size: 1.1em;
+    }
+
+    .home-container .section-heading {
+        font-size: 2.2em;
+    }
+
+    .home-container .theme-boxes,
+    .home-container .rules-content {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .home-container .hero-section {
+        font-size: 0.9rem;
+        word-break: break-all;
+    }
+
+    .home-container .hero-section,
+    .home-container .about-section,
+    .home-container .rules-section {
+        padding: 30px 15px;
+        margin-bottom: 30px;
+    }
+
+    .home-container .main-heading {
+        font-size: 2.5em;
+    }
+
+    .home-container .hero-description {
+        font-size: 1em;
+    }
+
+    .home-container .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .home-container .play-now-btn,
+    .home-container .create-room-btn {
+        width: 80%;
+        max-width: 250px;
+        font-size: 1.1em;
+        padding: 12px 25px;
+    }
+
+    .home-container .section-heading {
+        font-size: 1.8em;
+    }
+
+    .home-container .section-description {
+        font-size: 0.95em;
+    }
+
+    .home-container .theme-boxes,
+    .home-container .rules-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .home-container .theme-box,
+    .home-container .rule-item {
+        padding: 20px;
+    }
+
+    .home-container .theme-box h3,
+    .home-container .rule-item h3 {
+        font-size: 1.3em;
+    }
+
+    .home-container .theme-box p,
+    .home-container .rule-item p {
+        font-size: 0.9em;
+    }
+
+    .home-container .play-heading {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 379px) {
+
+    .home-container .main-heading {
+        font-size: 2.2em;
+    }
+
+    .home-container .hero-description {
+        font-size: 0.9em;
+    }
+
+    .home-container .section-heading {
+        font-size: 1.6em;
+    }
+
+    .home-container .play-now-btn,
+    .home-container .create-room-btn {
+        font-size: 1em;
+        padding: 10px 20px;
+    }
+
+    .home-container .play-heading {
+        font-size: 1.3rem;
+    }
+}

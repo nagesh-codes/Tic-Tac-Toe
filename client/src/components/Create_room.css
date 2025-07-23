@@ -1,0 +1,187 @@
+.create-container {
+    background: linear-gradient(135deg, #FF69B4, #8A2BE2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100dvh;
+    padding: 1rem;
+}
+
+.create-container .wrapper {
+    width: 100%;
+    max-width: 900px;
+    height: auto;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 20px;
+    backdrop-filter: blur(15px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 15px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    overflow: hidden;
+    scale: 0.9;
+    animation: fadeOut 0.7s ease-out forwards;
+}
+
+@keyframes fadeOut {
+    100% {
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+.create-container .main-heading {
+    font-family: 'Permanent Marker', cursive;
+    text-align: center;
+}
+
+.create-container .middle {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.create-container .left-side {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.create-container .description,
+.create-container .description-highlight {
+    background-color: rgb(192, 101, 154);
+    padding: 10px;
+    border-left: 4px solid #fff;
+    border-radius: 10px;
+}
+
+.create-container .right-side {
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.create-container .input-field {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    width: 100%;
+    font-weight: bolder;
+}
+
+.create-container label {
+    margin-left: 6px;
+}
+
+.create-container input {
+    padding: 10px 20px;
+    border-radius: 10px;
+    outline: 0;
+    border: 0;
+    font-weight: bolder;
+    transition: all 0.3s;
+}
+
+.create-container input:focus {
+    box-shadow: 0 0 10px rgb(255, 255, 255);
+}
+
+.create-container .btn-field {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.create-container .cpy-btn {
+    position: absolute;
+    top: 71%;
+    left: 92%;
+    transform: translate(-50%, -50%);
+    padding: 5px 10px;
+    background-color: #FF69B4;
+    border-radius: 10px;
+}
+
+.create-container .btn-field button,
+.create-container .btn-field a {
+    padding: 12px;
+    width: 100%;
+    text-decoration: none;
+    max-width: 200px;
+    text-align: center;
+    margin: 0 auto;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(45deg, #FFB6C1, #FF69B4);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.create-container .btn-field button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 105, 180, 0.6);
+}
+
+.create-container .btn-field a {
+    background: linear-gradient(45deg, #feb47b 0%, #ff7e5f 100%);
+}
+
+.create-container .btn-field a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px #feb47b;
+}
+
+@media (max-width: 479px) and (min-width: 379px) {
+    .create-container .middle {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .create-container .btn-field {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .create-container .btn-field button,
+    .create-container .btn-field a {
+        max-width: 100%;
+    }
+
+    .create-container .cpy-btn {
+        left: 89%;
+    }
+}
+
+@media (max-width: 379px) {
+    .create-container .middle {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .create-container .btn-field {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .create-container .description-highlight {
+        display: none;
+    }
+
+    .create-container .btn-field button,
+    .create-container .btn-field a {
+        max-width: 100%;
+    }
+
+    .create-container .cpy-btn {
+        left: 88%;
+    }
+}

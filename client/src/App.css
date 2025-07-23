@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Permanent+Marker&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    color: #fff;
+    overflow: scroll;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    scroll-behavior: smooth;
+}
