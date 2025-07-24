@@ -16,9 +16,12 @@ const Create_room = () => {
 
                         <div className="left-side">
                             <p className="description">
-                                Ready to set up your own exclusive space? Create a new private room in just a few clicks! Generate a unique private code that you can share with friends, family, or colleagues. Once created, your private room is ready for your group to join, offering a secure and dedicated environment for your activities. It's simple, quick, and puts you in control.
+                                Ready to set up your own exclusive space? Create a new private room in just a few clicks! We generate a unique private code that you can share with friends, family, or colleagues.
                             </p>
-                            <p className="description-highlight">
+                            <p className="description hide">
+                                Once created, your private room is ready for your group to join, offering a secure and dedicated environment for your activities. It's simple, quick, and puts you in control.
+                            </p>
+                            <p className="description">
                                 Create now and enjoy a fun-filled gaming experience with your friends! It's the quick and easy way to play privately!
                             </p>
                         </div>
@@ -48,6 +51,9 @@ const Create_room = () => {
                             <div className="btn-field">
                                 <button type='submit'>Create The Room</button>
                                 <Link to={'/join_room'}>Join Another Room</Link>
+                            </div>
+                            <div className="hm-btn">
+                                <Link to={'/'}>Go To Home</Link>
                             </div>
                         </form>
                     </div>

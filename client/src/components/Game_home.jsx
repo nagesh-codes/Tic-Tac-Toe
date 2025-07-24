@@ -8,7 +8,7 @@ const Game_home = () => {
       <div className="game-home-container">
         <div className="wrapper">
           <div className="left-panel">
-            <h1>Pink Tic-Tac-Toe Fun!</h1>
+            <h1>Tic-Tac-Toe Fun!</h1>
             <p className="description">Challenge your friend in this vibrant Tic-Tac-Toe match!</p>
 
             <div className="players-display">

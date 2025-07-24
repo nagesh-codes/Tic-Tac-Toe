@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
 
@@ -6,7 +5,7 @@ const Home = () => {
   return (
     <div className="home-container">
       <header className="hero-section">
-        <h1 className="main-heading">Welcome to Pink Tic-Tac-Toe!</h1>
+        <h1 className="main-heading">Welcome to <span class="no-break">Tic-Tac-Toe!</span></h1>
         <p className="hero-description">
           Dive into a vibrant and exciting Tic-Tac-Toe experience with a delightful pink theme.
           Challenge your friends in a classic game of X's and O's, designed for fun and friendly competition!
@@ -16,7 +15,7 @@ const Home = () => {
       <section className="about-section">
         <h2 className="section-heading">About the Game</h2>
         <p className="section-description">
-          Pink Tic-Tac-Toe takes the timeless game to a new level with its stunning visual design and smooth gameplay.
+        Tic-Tac-Toe takes the timeless game to a new level with its stunning visual design and smooth gameplay.
           It's perfect for quick matches with friends or family, offering a simple yet engaging challenge.
         </p>
         <div className="theme-boxes">
@@ -66,7 +65,7 @@ const Home = () => {
       </section>
 
       <div className="hero-section">
-        <p className='play-heading'>💓 Start The Fun Today! 💓</p>
+        <p className='play-heading'>Start The Fun Today!</p>
         <div className="hero-buttons">
           <Link to="/join_room" className="play-now-btn">Play Now!</Link>
           <Link to="/create_room" className="create-room-btn">Create Room</Link>

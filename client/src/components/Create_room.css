@@ -50,9 +50,9 @@
     gap: 10px;
 }
 
-.create-container .description,
-.create-container .description-highlight {
-    background-color: rgb(192, 101, 154);
+.create-container .description {
+    font-family: 'Dancing Script', cursive;
+    background-color: rgb(151, 73, 215);
     padding: 10px;
     border-left: 4px solid #fff;
     border-radius: 10px;
@@ -61,6 +61,7 @@
 .create-container .right-side {
     display: flex;
     align-items: start;
+    justify-content: space-evenly;
     flex-direction: column;
     gap: 20px;
 }
@@ -91,12 +92,6 @@
     box-shadow: 0 0 10px rgb(255, 255, 255);
 }
 
-.create-container .btn-field {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-}
 
 .create-container .cpy-btn {
     position: absolute;
@@ -106,10 +101,20 @@
     padding: 5px 10px;
     background-color: #FF69B4;
     border-radius: 10px;
+    cursor: pointer;
+}
+
+.create-container .btn-field,
+.create-container .hm-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
 }
 
 .create-container .btn-field button,
-.create-container .btn-field a {
+.create-container .btn-field a,
+.create-container .hm-btn a {
     padding: 12px;
     width: 100%;
     text-decoration: none;
@@ -138,6 +143,15 @@
 .create-container .btn-field a:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 20px #feb47b;
+}
+
+.create-container .hm-btn a {
+    min-width: 100%;
+}
+
+.create-container .hm-btn a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 105, 180, 0.6);
 }
 
 @media (max-width: 479px) and (min-width: 379px) {
@@ -172,7 +186,7 @@
         gap: 10px;
     }
 
-    .create-container .description-highlight {
+    .create-container .hide {
         display: none;
     }
 

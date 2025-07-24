@@ -36,6 +36,14 @@
     line-height: 1.2;
     animation: textGlow 2s infinite alternate;
     text-align: center;
+    word-break: normal;
+    overflow-wrap: break-word;
+    white-space: normal;
+    hyphens: manual;
+}
+
+.no-break {
+    white-space: nowrap;
 }
 
 .home-container .hero-description {
@@ -265,7 +273,6 @@
 @media (max-width: 900px) {
     .home-container .main-heading {
         font-size: 3em;
-        word-wrap: wrap;
     }
 
     .home-container .hero-description {
@@ -282,10 +289,10 @@
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 479px) and (min-width: 379px) {
+
     .home-container .hero-section {
         font-size: 0.9rem;
-        word-break: break-all;
     }
 
     .home-container .hero-section,
@@ -354,8 +361,9 @@
 @media (max-width: 379px) {
 
     .home-container .main-heading {
-        font-size: 2.2em;
+        font-size: 2.2rem;
     }
+
 
     .home-container .hero-description {
         font-size: 0.9em;

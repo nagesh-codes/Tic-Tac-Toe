@@ -17,9 +17,12 @@ const Entry = () => {
 
             <div className="left-side">
               <p className="description">
-                Enter a unique private code to connect with your friends in a dedicated space. Simply type the code you've received into the input field and click "Join" to instantly access the room. If you don't have a code, you can easily create your own private room and invite others to join you.
+                Enter a unique private code to connect with your friends in a dedicated space. Simply type the code you've received into the input field and click "Join" to instantly access the room.
               </p>
-              <p className="description-highlight">
+              <p className="description hide">
+                If you don't have a code, you can easily create your own private room and invite others to join you.
+              </p>
+              <p className="description hide">
                 Join now and enjoy a fun-filled gaming experience with your friends! It's the quick and easy way to connect privately!
               </p>
             </div>
@@ -48,6 +51,9 @@ const Entry = () => {
               <div className="btn-field">
                 <button type='submit'>Join The Room</button>
                 <Link to={'/create_room'}>Create New Room</Link>
+              </div>
+              <div className="hm-btn">
+                <Link to={'/'}>Go To Home</Link>
               </div>
             </form>
           </div>
