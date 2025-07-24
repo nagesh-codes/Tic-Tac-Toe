@@ -55,7 +55,14 @@
     background-color: rgb(151, 73, 215);
     padding: 10px;
     border-left: 4px solid #fff;
+    border-right: 4px solid #fff;
     border-radius: 10px;
+    transition: all 0.4s ease-in-out;
+}
+
+.join-container .description:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgb(60, 29, 85);
 }
 
 .join-container .right-side {
@@ -86,8 +93,9 @@
     font-weight: bolder;
     transition: all 0.3s;
 }
+
 .join-container input:focus {
-    box-shadow: 0 0 10px  rgb(255, 255, 255);
+    box-shadow: 0 0 10px rgb(255, 255, 255);
 }
 
 .join-container .btn-field,
