@@ -93,6 +93,11 @@
     border: 0;
     font-weight: bolder;
     transition: all 0.3s;
+    color: #FF69B4;
+}
+
+.create-container input::placeholder{
+    color: #FF69B4;
 }
 
 .create-container input:focus {
@@ -109,6 +114,12 @@
     background-color: #FF69B4;
     border-radius: 10px;
     cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.create-container .cpy-btn:hover{
+    transform:translate(-50%,-50%) translateY(-3px);
+    box-shadow: 0 7px 20px #FF69B4;
 }
 
 .create-container .btn-field,

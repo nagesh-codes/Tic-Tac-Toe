@@ -1,10 +1,51 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import './Create_room.css'
+import { error, success, warning } from '../App';
+import { useSocket } from '../components/SocketProvider';
 
 const Create_room = () => {
     const [roomid, setRoomid] = useState('Generating...');
-    const [name, setName] = useState('')
+    const [name, setName] = useState('');
+    const navigate = useNavigate();
+    const { socket, connected } = useSocket();
+
+    const handleForm = (e) => {
+        e.preventDefault();
+    };
+
+    useEffect(() => {
+        if (!socket && !connected) {
+            // navigate('/');
+            error('server is not connected.');
+            setRoomid('Generating...');
+            console.log(socket,connected);
+            return;
+        }
+        success('Connected to server');
+        socket.emit('get-id');
+    }, [socket, connected])
+
+    const handleCpy = () => {
+        if (roomid === 'Generating...') {
+            warning('Room ID is still being generating, please wait!')
+        } else {
+            navigator.clipboard.writeText(roomid)
+                .then(() => {
+                    success('RoomID Copied!')
+                }).catch(() => {
+                    error("RoomId Doesn't Copied")
+                });
+        }
+    }
+    try {
+        socket.on('take-id', (data) => {
+            setRoomid(data)
+        })
+    } catch (e) {
+        console.error('Error receiving room ID:', e);
+    }
+
     return (
         <>
             <div className="create-container">
@@ -26,15 +67,16 @@ const Create_room = () => {
                             </p>
                         </div>
 
-                        <form className="right-side">
+                        <form className="right-side" onClick={handleForm}>
                             <div className="input-field">
                                 <label htmlFor="name">Your Name</label>
                                 <input
                                     type="text"
                                     placeholder='Enter Your Name'
                                     value={name}
-                                    onInput={e => setName(e.target.value)}
+                                    onInput={e => setName(e.target.value.trim())}
                                     required
+                                    maxLength={"8"}
                                 />
                             </div>
                             <div className="input-field">
@@ -44,9 +86,9 @@ const Create_room = () => {
                                     placeholder='Enter The Room ID'
                                     value={roomid}
                                     onInput={e => setRoomid(e.target.value)}
-                                    required
+                                    readOnly
                                 />
-                                <div className="cpy-btn">Copy</div>
+                                <div className="cpy-btn" onClick={handleCpy}>Copy</div>
                             </div>
                             <div className="btn-field">
                                 <button type='submit'>Create The Room</button>

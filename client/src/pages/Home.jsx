@@ -5,7 +5,7 @@ const Home = () => {
   return (
     <div className="home-container">
       <header className="hero-section">
-        <h1 className="main-heading">Welcome to <span class="no-break">Tic-Tac-Toe!</span></h1>
+        <h1 className="main-heading">Welcome to <span className="no-break">Tic-Tac-Toe!</span></h1>
         <p className="hero-description">
           Dive into a vibrant and exciting Tic-Tac-Toe experience with a delightful pink theme.
           Challenge your friends in a classic game of X's and O's, designed for fun and friendly competition!

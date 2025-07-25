@@ -92,6 +92,11 @@
     border: 0;
     font-weight: bolder;
     transition: all 0.3s;
+    color: #FF69B4;
+}
+
+.join-container input::placeholder{
+    color: #FF69B4;
 }
 
 .join-container input:focus {

@@ -34,8 +34,9 @@ const Entry = () => {
                   type="text"
                   placeholder='Enter Your Name'
                   value={name}
-                  onInput={e => setName(e.target.value)}
+                  onInput={e => setName(e.target.value.trim())}
                   required
+                  maxLength={"8"}
                 />
               </div>
               <div className="input-field">
@@ -44,8 +45,9 @@ const Entry = () => {
                   type="text"
                   placeholder='Enter The Room ID'
                   value={roomid}
-                  onInput={e => setRoomid(e.target.value)}
+                  onInput={e => setRoomid(e.target.value.trim())}
                   required
+                  maxLength={"6"}
                 />
               </div>
               <div className="btn-field">
