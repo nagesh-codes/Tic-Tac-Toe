@@ -3,26 +3,39 @@ import { Link, useNavigate } from 'react-router-dom'
 import './Create_room.css'
 import { error, success, warning } from '../App';
 import { useSocket } from '../components/SocketProvider';
+import Waiting from './Waiting';
 
 const Create_room = () => {
     const [roomid, setRoomid] = useState('Generating...');
     const [name, setName] = useState('');
-    const navigate = useNavigate();
     const { socket, connected } = useSocket();
+    const [staus, setStaus] = useState(true);
+    const [submit, setSubmit] = useState(true);
+    const navigate = useNavigate();
 
     const handleForm = (e) => {
         e.preventDefault();
+        setSubmit(!submit)
+        socket.emit('createRoom', { roomid, name });
     };
+
+    const statusOfServer = () => {
+        setTimeout(() => {
+            if (!staus) {
+                error('server is not connected.');
+            }
+        }, 3000);
+    }
+
 
     useEffect(() => {
         if (!socket && !connected) {
             // navigate('/');
-            error('server is not connected.');
             setRoomid('Generating...');
-            console.log(socket,connected);
+            statusOfServer();
             return;
         }
-        success('Connected to server');
+        setStaus(!staus);
         socket.emit('get-id');
     }, [socket, connected])
 
@@ -30,24 +43,29 @@ const Create_room = () => {
         if (roomid === 'Generating...') {
             warning('Room ID is still being generating, please wait!')
         } else {
-            navigator.clipboard.writeText(roomid)
-                .then(() => {
-                    success('RoomID Copied!')
-                }).catch(() => {
-                    error("RoomId Doesn't Copied")
-                });
+            if (navigator && navigator.clipboard) {
+                navigator.clipboard.writeText(roomid)
+                    .then(() => success('Room ID Copied!'))
+                    .catch(() => error("Room ID wasn't copied."));
+            } else {
+                error('Clipboard API not supported on this browser.');
+            }
         }
     }
     try {
+        socket.on('serverData', (data) => {
+            console.log(data.USERS, data.room_info, data.room_status, data.rooms);
+        })
         socket.on('take-id', (data) => {
             setRoomid(data)
         })
     } catch (e) {
-        console.error('Error receiving room ID:', e);
+        console.error('Error receiving room ID:', e.message);
     }
 
     return (
         <>
+        {submit ?
             <div className="create-container">
                 <div className="wrapper">
                     <div className="main-heading">
@@ -67,7 +85,7 @@ const Create_room = () => {
                             </p>
                         </div>
 
-                        <form className="right-side" onClick={handleForm}>
+                        <form className="right-side" onSubmit={handleForm}>
                             <div className="input-field">
                                 <label htmlFor="name">Your Name</label>
                                 <input
@@ -101,6 +119,7 @@ const Create_room = () => {
                     </div>
                 </div>
             </div>
+            : <Waiting />}
         </>
     )
 }

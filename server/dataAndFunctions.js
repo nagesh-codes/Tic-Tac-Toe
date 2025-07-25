@@ -1,6 +1,11 @@
-export let USERS = {};
+export let USERS = {
+    "id":"name"
+};
 export let room_info = {
-    "asdf": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    "asdf":{
+         game_status : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         unique_id:"fdsa"
+    }
 };
 export let room_status = {
     "asdf": {
@@ -9,7 +14,7 @@ export let room_status = {
         "draw": 1
     }
 }
-export let rooms = [];
+export let rooms = ["kjhdf"];
 
 export const generateRoomId = () => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -21,8 +26,6 @@ export const generateRoomId = () => {
         for (let i = 0; i < length; i++) {
             result += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
-    } while (rooms.some(room => room === result));
-    rooms.push(result);
-    room_info[result] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    } while (rooms.some(room => room === result))
     return result
 }
