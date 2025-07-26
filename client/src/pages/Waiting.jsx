@@ -1,8 +1,26 @@
+import { useEffect } from 'react'
 import cat1 from '../assets/cat1.gif'
 import cat2 from '../assets/cat2.gif'
+import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import './Waiting.css'
+import { useSocket } from '../components/SocketProvider'
 
 const Waiting = () => {
+  const [roomid, setRoomid] = useState('')
+  const navigate = useNavigate();
+  const { socket } = useSocket();
+
+  useEffect(() => {
+    if (!sessionStorage.getItem('uni')) {
+      navigate("/");
+    }
+    if (!socket) return;
+
+    setRoomid(sessionStorage.getItem('room'));
+    
+  }, [socket]);
+
   return (
     <>
       <div className="waiting-container">
@@ -18,8 +36,9 @@ const Waiting = () => {
             </div>
             <div className="right-side">
               <div className="description">
-                This is the waiting area where the host waits for a friend to join the private game room. Once the second player connects, the waiting screen will automatically disappear, and the game will begin. It's a simple, real-time lobby to ensure both players are ready before starting the match.
+                The host waits here for a friend to join the private game. Once both players are connected, the game starts automatically. A simple real-time lobby to begin the match smoothly.
               </div>
+              <div className="room-id description">RoomID is : <span>{roomid}</span></div>
             </div>
           </div>
         </div>

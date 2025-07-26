@@ -12,11 +12,12 @@ export let ROOMS = {
     createdAt: Date.now(),
     createdBy: 'socketID',
     game_status: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    users: {
+    players: {
       "userId1": [0, 0],
       "userId2": [0, 0]
     },
-    draw: 1
+    draw: 1,
+    isFull: false
   }
 };
 

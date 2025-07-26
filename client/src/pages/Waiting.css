@@ -51,13 +51,18 @@
     justify-content: center;
 }
 
-.waiting-container .left-side .description:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgb(60, 29, 85);
+.waiting-container .right-side {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
+
 
 .waiting-container .right-side .description {
     font-family: 'Dancing Script', cursive;
+    width: 100%;
     font-size: 1.2rem;
     color: white;
     background-color: rgb(151, 73, 215);
@@ -67,6 +72,11 @@
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     transition: all 0.4s ease-in-out;
+}
+
+.waiting-container .right-side .description:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgb(60, 29, 85);
 }
 
 .waiting-container .gif_area img {

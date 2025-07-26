@@ -84,7 +84,6 @@ export const warning = (message) =>
   ));
 
 function App() {
-
   return (
     <>
       <Toaster

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import './Create_room.css'
 import { error, success, warning } from '../App';
 import { useSocket } from '../components/SocketProvider';
+import './Create_room.css'
 
 const Create_room = () => {
     const [roomid, setRoomid] = useState('Generating...');
@@ -12,9 +12,42 @@ const Create_room = () => {
     const [staus, setStaus] = useState(true);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (!socket && !connected) {
+            setRoomid('Generating...');
+            statusOfServer();
+            return;
+        }
+        setStaus(!staus);
+        socket.emit('get-id');
+
+        socket.on('take-id', (data) => {
+            sessionStorage.setItem('room', data);
+            setRoomid(data);
+        });
+        
+        socket.on('roomCreated', (data) => {
+            sessionStorage.setItem('uni', data);
+            success('roomid set ' + roomid)
+            sessionStorage.setItem('status', 'offline');
+            success('Room Successfully Created');
+            navigate("/waiting_area");
+        });
+
+        socket.on('serverErr', () => {
+            error('Internal Server Error');
+        });
+
+        return () => {
+            socket.off('take-id');
+            socket.off('roomCreated',);
+            socket.off('serverErr');
+        };
+    }, [socket, connected])
+
     const handleForm = (e) => {
         e.preventDefault();
-        socket.emit('createRoom', { roomid, name });
+        socket.emit('createRoom', { roomid, name, email });
     };
 
     const statusOfServer = () => {
@@ -24,18 +57,6 @@ const Create_room = () => {
             }
         }, 3000);
     }
-
-
-    useEffect(() => {
-        if (!socket && !connected) {
-            // navigate('/');
-            setRoomid('Generating...');
-            statusOfServer();
-            return;
-        }
-        setStaus(!staus);
-        socket.emit('get-id');
-    }, [socket, connected])
 
     const handleCpy = () => {
         if (roomid === 'Generating...') {
@@ -50,16 +71,6 @@ const Create_room = () => {
             }
         }
     }
-    try {
-        socket.on('serverData', (data) => {
-            console.log(data.USERS, data.room_info, data.room_status, data.rooms);
-        })
-        socket.on('take-id', (data) => {
-            setRoomid(data)
-        })
-    } catch (e) {
-        console.error('Error receiving room ID:', e.message);
-    }
 
     return (
         <>
@@ -71,15 +82,16 @@ const Create_room = () => {
                     <div className="middle">
 
                         <div className="left-side">
-                            <p className="description hide">
+                            <div className="description hide">
                                 Ready to set up your own exclusive space? Create a new private room in just a few clicks! We generate a unique private code that you can share with friends, family, or colleagues.
-                            </p>
-                            <p className="description hide">
+                            </div>
+                            <div className="description hide">
                                 Once created, your private room is ready for your group to join, offering a secure and dedicated environment for your activities. It's simple, quick, and puts you in control.
-                            </p>
-                            <p className="description">
-                                Create now and enjoy a fun-filled gaming experience with your friends! It's the quick and easy way to play privately!
-                            </p>
+                            </div>
+                            <div className="description">
+                                <h5>Room Expiry Notice</h5>
+                                Once a room is created, it will remain active for up to 3 hours. After this time, the room will be automatically deleted to ensure server efficiency and security. Make sure both players join and complete the game within this time frame.
+                            </div>
                         </div>
 
                         <form className="right-side" onSubmit={handleForm}>
@@ -97,7 +109,7 @@ const Create_room = () => {
                             <div className="input-field">
                                 <label htmlFor="name">Your Email ID</label>
                                 <input
-                                    type="email"
+                                    type="text"
                                     placeholder='Enter Your email ID'
                                     value={email}
                                     onInput={e => setEmail(e.target.value.trim())}

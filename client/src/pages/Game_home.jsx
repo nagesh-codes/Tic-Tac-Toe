@@ -1,12 +1,28 @@
 import { useState } from 'react';
 import './Game_home.css'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useEffect } from 'react';
 
 const Game_home = () => {
   const [win, setWin] = useState(0);
   const [loose, setLoose] = useState(0);
   const [draw, setDraw] = useState(0);
   const [curPlayer, setCurPlayer] = useState('Nagesh');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if ((sessionStorage.getItem('status') == 'online') && (!sessionStorage.getItem('uni'))) {
+      navigate("/");
+    }
+  }, []);
+
+  const handleClick = () => {
+    sessionStorage.removeItem('status');
+    sessionStorage.removeItem('uni');
+    sessionStorage.removeItem('roomid');
+    sessionStorage.removeItem('name');
+    sessionStorage.removeItem('email');
+  };
   return (
     <>
       <div className="game-home-container">
@@ -32,7 +48,7 @@ const Game_home = () => {
               <button className="restart-btn">Restart Game</button>
             </div>
             <div className="home-btn">
-              <Link to={"/"}>Go To Home</Link>
+              <Link to={"/"} onClick={handleClick}>Go To Home</Link>
             </div>
           </div>
 

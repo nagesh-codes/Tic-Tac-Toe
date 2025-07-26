@@ -2,10 +2,43 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom'
 import "./join_room.css"
 import "../App.css"
+import { useSocket } from '../components/SocketProvider';
+import { useEffect } from 'react';
+import { error, success, warning } from '../App';
 
 const Entry = () => {
   const [roomid, setRoomid] = useState('');
-  const [name, setName] = useState('')
+  const [name, setName] = useState('');
+  const { socket, connected } = useSocket();
+
+  useEffect(() => {
+    if (!socket && !connected) return;
+
+    socket.on('roomNotAvailabel', () => { error('Such Room Is Not Available.') });
+
+    socket.on('serverErr', () => { error('Internal Server Error') });
+
+    socket.on('RoomJoin', () => {
+      success('Successfully Joined The Room');
+    })
+
+    socket.on('changeName', () => {
+      warning('This Name Is Already Taken By Room Creator, Please Choose Another Name');
+    });
+
+    return () => {
+      socket.off('roomNotAvailabel');
+      socket.off('serverErr');
+      socket.off('RoomJoin');
+      socket.off('changeName');
+    }
+
+  })
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    socket.emit('joinRoom', { name, roomid });
+  }
   return (
     <>
       <div className="join-container">
@@ -27,7 +60,7 @@ const Entry = () => {
               </p>
             </div>
 
-            <form className="right-side">
+            <form className="right-side" onSubmit={handleSubmit}>
               <div className="input-field">
                 <label htmlFor="name">Your Name</label>
                 <input
