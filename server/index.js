@@ -25,7 +25,6 @@ const io = new Server(server, {
 const port = 5555;
 
 io.on('connection', (socket) => {
-    // console.log('user is connected');
     socket.on('get-id', () => {
         const id = generateRoomId();
         io.to(socket.id).emit('take-id', id);
@@ -43,12 +42,13 @@ io.on('connection', (socket) => {
                 unique_id: data.roomid.split("").reverse().join(''),
                 createdAt: Date.now(),
                 createBy: socket_ID,
-                game_staus: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                game_staus: [2, 0, 2, 0, 0, 1, 0, 2, 0],
                 players: {
-                    [socket_ID]: [0, 0],
+                    [socket_ID]: [1, 2],
                 },
                 draw: 0,
-                full: false
+                isFull: false,
+                turn: Math.floor(Math.random() * 2)
             }
             const unique = data.roomid.split("").reverse().join('');
             io.to(socket_ID).emit('roomCreated', unique);
@@ -67,12 +67,43 @@ io.on('connection', (socket) => {
             } else if (USERS[Object.keys(ROOMS[data.roomid].players)[0]]?.name === data.name) {
                 io.to(ID).emit('changeName');
             } else {
-                ROOMS[data.roomid]['users'][ID] = [0, 0];
-                const pl1_id = USERS[Object.keys(ROOMS[data.roomid].players)[0]];
+                USERS[ID] = {
+                    name: data.name,
+                    roomID: data.roomid,
+                };
+                ROOMS[data.roomid]['players'][ID] = [5, 6];
+                const pl1_id = Object.keys(ROOMS[data.roomid].players)[0];
                 ROOMS[data.roomid].isFull = true;
                 io.to(pl1_id).emit('partnerJoined');
                 io.to(ID).emit('RoomJoin');
             }
+        } catch (e) {
+            console.error(e);
+            io.to(ID).emit('serverErr');
+        }
+    });
+
+    socket.on('takeInfo', (data) => {
+        const roomid = data.roomid;
+        const ID = socket.id;
+        try {
+            const pl1 = USERS[Object.keys(ROOMS[roomid].players)[0]]?.name;
+            const pl2 = USERS[Object.keys(ROOMS[roomid].players)[1]]?.name;
+            const pl1_sta = Object.values(ROOMS[roomid].players)[0];
+            const pl2_sta = Object.values(ROOMS[roomid].players)[1];
+            const createdBy = USERS[ROOMS[roomid].createdBy].name;
+            const dt = {
+                roomid: roomid,
+                game_status: ROOMS[roomid].game_staus,
+                draw: ROOMS[roomid].draw,
+                turn: ROOMS[roomid].turn,
+                pl1,
+                pl2,
+                pl1_sta,
+                pl2_sta,
+                createdBy
+            };
+            io.to(ID).emit('getInfo', dt);
         } catch (e) {
             console.error(e);
             io.to(ID).emit('serverErr');

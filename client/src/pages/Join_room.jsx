@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom'
-import "./join_room.css"
-import "../App.css"
+import { Link, useNavigate } from 'react-router-dom'
 import { useSocket } from '../components/SocketProvider';
 import { useEffect } from 'react';
 import { error, success, warning } from '../App';
+import "./join_room.css"
+import "../App.css"
 
 const Entry = () => {
   const [roomid, setRoomid] = useState('');
   const [name, setName] = useState('');
   const { socket, connected } = useSocket();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!socket && !connected) return;
@@ -19,7 +20,12 @@ const Entry = () => {
     socket.on('serverErr', () => { error('Internal Server Error') });
 
     socket.on('RoomJoin', () => {
+      socket.emit('takeInfo', { roomid });
       success('Successfully Joined The Room');
+    });
+
+    socket.on('getInfo', (data) => {
+      navigate('/game_home', { state: data });
     })
 
     socket.on('changeName', () => {

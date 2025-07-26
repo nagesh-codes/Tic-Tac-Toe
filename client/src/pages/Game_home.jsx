@@ -1,20 +1,60 @@
-import { useState } from 'react';
-import './Game_home.css'
-import { Link, useNavigate } from 'react-router-dom'
+import { use, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react';
+import { useSocket } from '../components/SocketProvider'
+import './Game_home.css'
 
 const Game_home = () => {
-  const [win, setWin] = useState(0);
-  const [loose, setLoose] = useState(0);
-  const [draw, setDraw] = useState(0);
+  const [roomid, setRoomid] = useState(sessionStorage.getItem('room') || 'Room ID');
+  const [win, setWin] = useState(10);
+  const [loose, setLoose] = useState(20);
+  const [draw, setDraw] = useState(20);
   const [curPlayer, setCurPlayer] = useState('Nagesh');
   const navigate = useNavigate();
+  const location = useLocation();
+  const { socket } = useSocket();
+  const [pl1, setPl1] = useState('player1');
+  const [pl2, setPl2] = useState('player2');
+  const [disable, setDisable] = useState(true);
+  const [allCells, setAllCells] = useState('');
+  const player = sessionStorage.getItem('pl1') || 'pl2';
 
   useEffect(() => {
+    const data = location.state;
+    updateGameStatus(data);
+  }, [])
+
+  useEffect(() => {
+    if (!socket) return;
+    if (!location.state?.data) { }
     if ((sessionStorage.getItem('status') == 'online') && (!sessionStorage.getItem('uni'))) {
       navigate("/");
     }
-  }, []);
+    return () => {
+    }
+  }, [socket]);
+
+  const updateGameStatus = (data) => {
+    setRoomid(data.roomid);
+    setAllCells(document.querySelectorAll('.cell'));
+    data.game_status.forEach((ele, index) => {
+      if (ele == 1) {
+        allCells[index].textContent = 'X';
+        allCells[index].classList.add('x');
+      } else if (ele == 2) {
+        allCells[index].textContent = 'O'
+        allCells[index].classList.add('o');
+      }
+    });
+    setPl1(data.pl1);
+    setPl2(data.pl2);
+    if (data.turn == 0) {
+      setCurPlayer(data.pl1);
+    };
+    player === 'pl1' ? setWin(data.pl1_sta[0]) : setWin(data.pl2_sta[0]);
+    player === 'pl1' ? setWin(data.pl1_sta[1]) : setWin(data.pl2_sta[1]);
+    setDraw(data.draw);
+  }
 
   const handleClick = () => {
     sessionStorage.removeItem('status');
@@ -33,11 +73,11 @@ const Game_home = () => {
 
             <div className="players-display">
               <div className="player-card player-x active-player">
-                <span id="playerXName">Nagesh X</span>
+                <span id="playerXName">{pl1} X</span>
                 <i className="fas fa-times"></i>
               </div>
               <div className="player-card player-o">
-                <span id="playerOName">Mahesh O</span>
+                <span id="playerOName">{pl2} O</span>
                 <i className="far fa-circle"></i>
               </div>
             </div>
@@ -47,22 +87,20 @@ const Game_home = () => {
               <button className="reset-btn">Reset Game</button>
               <button className="restart-btn">Restart Game</button>
             </div>
-            <div className="home-btn">
-              <Link to={"/"} onClick={handleClick}>Go To Home</Link>
-            </div>
+            <Link className="home-btn" to={"/"} onClick={handleClick}>Go To Home</Link>
           </div>
 
           <div className="right-panel">
             <div id="gameBoard" className="game-board">
-              <div className="cell">X</div>
-              <div className="cell">O</div>
-              <div className="cell"></div>
-              <div className="cell"></div>
-              <div className="cell"></div>
-              <div className="cell"></div>
-              <div className="cell"></div>
-              <div className="cell"></div>
-              <div className="cell"></div>
+              <div className={`${disable ? 'no-click' : ''}  cell`}></div>
+              <div className={`${disable ? 'no-click' : ''}  cell`}></div>
+              <div className={`${disable ? 'no-click' : ''}  cell`}></div>
+              <div className={`${disable ? 'no-click' : ''}  cell`}></div>
+              <div className={`${disable ? 'no-click' : ''}  cell`}></div>
+              <div className={`${disable ? 'no-click' : ''}  cell`}></div>
+              <div className={`${disable ? 'no-click' : ''}  cell`}></div>
+              <div className={`${disable ? 'no-click' : ''}  cell`}></div>
+              <div className={`${disable ? 'no-click' : ''}  cell`}></div>
             </div>
             <div className="info-area">
               <div className="game-btn win">WIN: <span>{win}</span></div>

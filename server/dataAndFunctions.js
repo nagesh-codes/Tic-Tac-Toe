@@ -13,13 +13,25 @@ export let ROOMS = {
     createdBy: 'socketID',
     game_status: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     players: {
-      "userId1": [0, 0],
-      "userId2": [0, 0]
+      "userId1": [1, 2],
+      "userId2": [3, 4]
     },
     draw: 1,
-    isFull: false
+    isFull: false,
+    turn: 0
   }
 };
+
+const game_win_chance = [
+  [0, 1, 2],
+  [3, 4, 5],
+  [6, 7, 8],
+  [0, 3, 6],
+  [1, 4, 7],
+  [2, 5, 8],
+  [0, 4, 8],
+  [2, 4, 6]
+];
 
 
 export const generateRoomId = () => {
@@ -33,5 +45,15 @@ export const generateRoomId = () => {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
   } while (Object.keys(ROOMS).some(room => room === result))
-  return result
+  return result;
 }
+
+export const checkWin = (game_status) => {
+  for (let ind of game_win_chance) {
+    const [a, b, c] = ind;
+    if (game_status[a] && game_status[a] === game_status[b] && game_status[a] === game_status[c]) {
+      return true;
+    }
+  }
+  return false;
+};

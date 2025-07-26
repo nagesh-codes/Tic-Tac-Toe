@@ -3,8 +3,9 @@ import cat1 from '../assets/cat1.gif'
 import cat2 from '../assets/cat2.gif'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import './Waiting.css'
 import { useSocket } from '../components/SocketProvider'
+import { error } from '../App'
+import './Waiting.css'
 
 const Waiting = () => {
   const [roomid, setRoomid] = useState('')
@@ -16,13 +17,26 @@ const Waiting = () => {
       navigate("/");
     }
     if (!socket) return;
+
     setRoomid(sessionStorage.getItem('room'));
+
     socket.on('partnerJoined', () => {
-      navigate("/game_home");
+      socket.emit('takeInfo', { roomid: sessionStorage.getItem('room') });
     });
+
+    socket.on('getInfo', (data) => {
+      navigate('/game_home', { state: data });
+    });
+
+    socket.on('serverErr', () => {
+      error('Server Error! Please try again later.');
+    })
 
     return () => {
       socket.off('partnerJoined');
+      socket.off('giveInfo');
+      socket.off('getInfo');
+      socket.off('serverErr');
     };
   }, [socket]);
 

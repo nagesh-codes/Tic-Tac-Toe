@@ -144,6 +144,10 @@
     color: #ADD8E6;
 }
 
+.game-home-container .no-click {
+    pointer-events: none;
+}
+
 @keyframes winningGlow {
     0% {
         box-shadow: 0 0 10px #fff, 0 0 20px #FFDAB9;
@@ -201,6 +205,8 @@
     cursor: pointer;
     transition: all 0.3s;
     box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+    text-decoration: none;
+    text-align: center;
 }
 
 .game-home-container .restart-btn {
@@ -392,7 +398,9 @@
     }
 
     .game-home-container .btns {
+        position: relative;
         min-width: 100%;
+        left: -29px;
     }
 
     .game-home-container .wrapper .reset-btn,
@@ -402,6 +410,9 @@
         max-width: 200px;
         margin-left: 12%;
         text-wrap: nowrap;
+    }
+    .game-home-container .hide {
+        display: none;
     }
 }
 
