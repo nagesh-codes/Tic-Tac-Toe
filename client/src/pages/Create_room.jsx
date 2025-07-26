@@ -3,19 +3,17 @@ import { Link, useNavigate } from 'react-router-dom'
 import './Create_room.css'
 import { error, success, warning } from '../App';
 import { useSocket } from '../components/SocketProvider';
-import Waiting from './Waiting';
 
 const Create_room = () => {
     const [roomid, setRoomid] = useState('Generating...');
     const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
     const { socket, connected } = useSocket();
     const [staus, setStaus] = useState(true);
-    const [submit, setSubmit] = useState(true);
     const navigate = useNavigate();
 
     const handleForm = (e) => {
         e.preventDefault();
-        setSubmit(!submit)
         socket.emit('createRoom', { roomid, name });
     };
 
@@ -65,7 +63,6 @@ const Create_room = () => {
 
     return (
         <>
-        {submit ?
             <div className="create-container">
                 <div className="wrapper">
                     <div className="main-heading">
@@ -74,7 +71,7 @@ const Create_room = () => {
                     <div className="middle">
 
                         <div className="left-side">
-                            <p className="description">
+                            <p className="description hide">
                                 Ready to set up your own exclusive space? Create a new private room in just a few clicks! We generate a unique private code that you can share with friends, family, or colleagues.
                             </p>
                             <p className="description hide">
@@ -95,6 +92,16 @@ const Create_room = () => {
                                     onInput={e => setName(e.target.value.trim())}
                                     required
                                     maxLength={"8"}
+                                />
+                            </div>
+                            <div className="input-field">
+                                <label htmlFor="name">Your Email ID</label>
+                                <input
+                                    type="email"
+                                    placeholder='Enter Your email ID'
+                                    value={email}
+                                    onInput={e => setEmail(e.target.value.trim())}
+                                    required
                                 />
                             </div>
                             <div className="input-field">
@@ -119,7 +126,6 @@ const Create_room = () => {
                     </div>
                 </div>
             </div>
-            : <Waiting />}
         </>
     )
 }

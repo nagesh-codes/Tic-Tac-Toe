@@ -1,19 +1,119 @@
 .waiting-container {
-    height: 100vh;
+    background: linear-gradient(135deg, #FF69B4, #8A2BE2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100dvh;
     width: 100vw;
+    padding: 1rem;
     overflow: hidden;
-    backdrop-filter: blur(10px);
 }
 
 .waiting-container .wrapper {
-    position: absolute;
     width: 100%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: black;
+    max-width: 900px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 20px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    animation: fadeIn 0.6s ease-in-out forwards;
+    opacity: 0;
+    scale: 0.95;
 }
 
-.waiting-container .main-heading{
-    min-width: 90%;
+@keyframes fadeIn {
+    100% {
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+.waiting-container .main-heading {
+    font-family: 'Permanent Marker', cursive;
+    text-align: center;
+    font-size: 2.2rem;
+    color: white;
+}
+
+.waiting-container .middle {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+.waiting-container .left-side {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.waiting-container .left-side .description:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgb(60, 29, 85);
+}
+
+.waiting-container .right-side .description {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.2rem;
+    color: white;
+    background-color: rgb(151, 73, 215);
+    padding: 20px;
+    border-left: 4px solid white;
+    border-right: 4px solid white;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s ease-in-out;
+}
+
+.waiting-container .gif_area img {
+    height: 120px;
+    width: 120px;
+    scale: 2.8;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+
+@media (max-width: 767px) {
+    .waiting-container .middle {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .waiting-container .main-heading {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+    }
+
+    .waiting-container .left-side .description {
+        font-size: 1rem;
+        padding: 15px;
+    }
+
+    .waiting-container .gif_area {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-block: 1.5rem;
+    }
+
+    .waiting-container .gif_area img {
+        width: 80px;
+        height: 80px;
+    }
 }

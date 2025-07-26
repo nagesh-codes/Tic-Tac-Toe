@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import Game_home from './pages/Game_home'
 import Create_room from './pages/Create_room'
 import './App.css'
+import Waiting from './pages/Waiting'
 
 const closeButton = (t, color) => (
   <button
@@ -96,6 +97,7 @@ function App() {
         <Route path="/join_room" element={<Join_room />} />
         <Route path="/create_room" element={<Create_room />} />
         <Route path="/game_home" element={<Game_home />} />
+        <Route path="/waiting_area" element={<Waiting />} />
         <Route path="*" element={<Home />} />
       </Routes>
     </>

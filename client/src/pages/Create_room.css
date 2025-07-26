@@ -48,6 +48,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    justify-content: space-around;
 }
 
 .create-container .description {
@@ -96,7 +97,7 @@
     color: #FF69B4;
 }
 
-.create-container input::placeholder{
+.create-container input::placeholder {
     color: #FF69B4;
 }
 
@@ -117,8 +118,8 @@
     transition: all 0.3s ease-in-out;
 }
 
-.create-container .cpy-btn:hover{
-    transform:translate(-50%,-50%) translateY(-3px);
+.create-container .cpy-btn:hover {
+    transform: translate(-50%, -50%) translateY(-3px);
     box-shadow: 0 7px 20px #FF69B4;
 }
 
@@ -173,9 +174,19 @@
 }
 
 @media (max-width: 479px) and (min-width: 379px) {
+    .create-container .main-heading {
+        font-size: 0.8rem;
+        margin-top: -20px;
+        margin-bottom: -15px;
+    }
+
     .create-container .middle {
         display: flex;
         flex-direction: column;
+    }
+
+    .create-container .right-side {
+        gap: 10px;
     }
 
     .create-container .btn-field {
@@ -194,6 +205,10 @@
 }
 
 @media (max-width: 379px) {
+    .create-container .main-heading {
+        font-size: 0.7rem;
+    }
+
     .create-container .middle {
         display: flex;
         flex-direction: column;
