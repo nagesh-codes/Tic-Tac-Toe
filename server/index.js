@@ -68,10 +68,13 @@ io.on('connection', (socket) => {
                 io.to(ID).emit('changeName');
             } else {
                 ROOMS[data.roomid]['users'][ID] = [0, 0];
+                const pl1_id = USERS[Object.keys(ROOMS[data.roomid].players)[0]];
+                ROOMS[data.roomid].isFull = true;
+                io.to(pl1_id).emit('partnerJoined');
                 io.to(ID).emit('RoomJoin');
             }
         } catch (e) {
-            console.error(e.message);
+            console.error(e);
             io.to(ID).emit('serverErr');
         }
     });

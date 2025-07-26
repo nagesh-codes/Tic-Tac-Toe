@@ -16,9 +16,14 @@ const Waiting = () => {
       navigate("/");
     }
     if (!socket) return;
-
     setRoomid(sessionStorage.getItem('room'));
-    
+    socket.on('partnerJoined', () => {
+      navigate("/game_home");
+    });
+
+    return () => {
+      socket.off('partnerJoined');
+    };
   }, [socket]);
 
   return (
