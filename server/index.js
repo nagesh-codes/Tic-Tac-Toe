@@ -3,7 +3,7 @@ import { Server } from 'socket.io'
 import http from 'http'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import { generateRoomId, room_info, room_status, rooms, USERS } from './dataAndFunctions.js'
+import { generateRoomId } from './dataAndFunctions.js'
 
 dotenv.config()
 const frontend_url = process.env.FRONTEND_URL
@@ -32,13 +32,6 @@ io.on('connection', (socket) => {
     });
 
     socket.on('createRoom', (data) => {
-        USERS[socket.id] = data.name;
-        room_info[data.roomid] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-        rooms.push(data.roomid);
     })
-
-    setInterval(()=>{
-        socket.emit('serverData',{rooms,room_info,room_status,USERS})
-    },5000)
 })
 server.listen(port, '0.0.0.0', () => { console.log(`server started on http://localhost:${port}`) });
