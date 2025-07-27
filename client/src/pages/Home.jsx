@@ -2,6 +2,14 @@ import { Link } from 'react-router-dom';
 import './Home.css';
 
 const Home = () => {
+
+  const scrollBottom = () => {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth'
+    });
+  }
+
   return (
     <div className="home-container">
       <header className="hero-section">
@@ -10,12 +18,15 @@ const Home = () => {
           Dive into a vibrant and exciting Tic-Tac-Toe experience with a delightful pink theme.
           Challenge your friends in a classic game of X's and O's, designed for fun and friendly competition!
         </p>
+        <p className="info" onClick={scrollBottom}>
+          Scroll To Bottom To Play!
+        </p>
       </header>
 
       <section className="about-section">
         <h2 className="section-heading">About the Game</h2>
         <p className="section-description">
-        Tic-Tac-Toe takes the timeless game to a new level with its stunning visual design and smooth gameplay.
+          Tic-Tac-Toe takes the timeless game to a new level with its stunning visual design and smooth gameplay.
           It's perfect for quick matches with friends or family, offering a simple yet engaging challenge.
         </p>
         <div className="theme-boxes">

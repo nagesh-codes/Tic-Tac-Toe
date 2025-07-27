@@ -3,21 +3,21 @@ import { Server } from 'socket.io'
 import http from 'http'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import { generateRoomId, ROOMS, USERS } from './dataAndFunctions.js'
+import { addPlayer, checkWin, generateRoomId, ROOMS, USERS } from './dataAndFunctions.js'
 
 dotenv.config()
 const frontend_url = process.env.FRONTEND_URL
-console.log(frontend_url)
+const frontend_url_2 = process.env.FRONTEND_URL_2
 const app = express();
 app.use(cors({
-    origin: [frontend_url],
+    origin: [frontend_url, frontend_url_2],
     methods: ["GET", "POST"],
     credentials: true
 }))
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: [frontend_url],
+        origin: [frontend_url, frontend_url_2],
         methods: ["GET", "POST"],
         credentials: true
     }
@@ -25,6 +25,7 @@ const io = new Server(server, {
 const port = 5555;
 
 io.on('connection', (socket) => {
+
     socket.on('get-id', () => {
         const id = generateRoomId();
         io.to(socket.id).emit('take-id', id);
@@ -33,18 +34,19 @@ io.on('connection', (socket) => {
     socket.on('createRoom', (data) => {
         const socket_ID = socket.id;
         try {
+            const sign = Math.floor(Math.random() * 2) === 0 ? 'X' : 'O';
             USERS[socket_ID] = {
                 name: data.name,
-                roomID: data.roomid,
+                roomid: data.roomid,
                 email: data.email
             };
             ROOMS[data.roomid] = {
                 unique_id: data.roomid.split("").reverse().join(''),
                 createdAt: Date.now(),
                 createBy: socket_ID,
-                game_staus: [2, 0, 2, 0, 0, 1, 0, 2, 0],
+                game_status: ['', '', '', 'X', 'O', 'X', 'O', '', 'O', 'O'],
                 players: {
-                    [socket_ID]: [1, 2],
+                    [socket_ID]: [1, 2, sign],
                 },
                 draw: 0,
                 isFull: false,
@@ -62,16 +64,23 @@ io.on('connection', (socket) => {
         const ID = socket.id;
         try {
             if ((!(Object.keys(ROOMS).some(rm => rm == data.roomid)))
-                && (!ROOMS[data.roomid].isFull)) {
+                || (ROOMS[data.roomid].isFull)) {
                 io.to(ID).emit('roomNotAvailabel');
             } else if (USERS[Object.keys(ROOMS[data.roomid].players)[0]]?.name === data.name) {
                 io.to(ID).emit('changeName');
             } else {
+                const firstPlayer = Object.values(ROOMS[data.roomid].players)[0];
+                const firstPlayerSign = firstPlayer[2];
                 USERS[ID] = {
                     name: data.name,
-                    roomID: data.roomid,
+                    email: null,
+                    roomid: data.roomid,
                 };
-                ROOMS[data.roomid]['players'][ID] = [5, 6];
+                if (firstPlayerSign === 'X') {
+                    ROOMS[data.roomid]['players'][ID] = [5, 6, 'O'];
+                } else {
+                    ROOMS[data.roomid]['players'][ID] = [5, 6, 'X'];
+                }
                 const pl1_id = Object.keys(ROOMS[data.roomid].players)[0];
                 ROOMS[data.roomid].isFull = true;
                 io.to(pl1_id).emit('partnerJoined');
@@ -87,21 +96,20 @@ io.on('connection', (socket) => {
         const roomid = data.roomid;
         const ID = socket.id;
         try {
+            addPlayer(data, ID);
             const pl1 = USERS[Object.keys(ROOMS[roomid].players)[0]]?.name;
             const pl2 = USERS[Object.keys(ROOMS[roomid].players)[1]]?.name;
             const pl1_sta = Object.values(ROOMS[roomid].players)[0];
             const pl2_sta = Object.values(ROOMS[roomid].players)[1];
-            const createdBy = USERS[ROOMS[roomid].createdBy].name;
             const dt = {
                 roomid: roomid,
-                game_status: ROOMS[roomid].game_staus,
+                game_status: ROOMS[roomid].game_status,
                 draw: ROOMS[roomid].draw,
                 turn: ROOMS[roomid].turn,
                 pl1,
                 pl2,
                 pl1_sta,
-                pl2_sta,
-                createdBy
+                pl2_sta
             };
             io.to(ID).emit('getInfo', dt);
         } catch (e) {
@@ -109,6 +117,71 @@ io.on('connection', (socket) => {
             io.to(ID).emit('serverErr');
         }
     });
+
+    socket.on('cellClick', (data) => {
+        try {
+            const room = ROOMS[data.roomid];
+            if (!room) return;
+
+            room.game_status = data.arr;
+            room.turn = room.turn === 0 ? 1 : 0;
+
+            const [id1, id2] = Object.keys(room.players);
+            const [sta1, sta2] = [room.players[id1], room.players[id2]];
+
+            const pl1 = USERS[id1]?.name;
+            const pl2 = USERS[id2]?.name;
+
+            const win = checkWin(data.arr);
+
+            if (win) {
+                if (pl1 === data.player) {
+                    room.players[id1] = [sta1[0] + 1, sta1[1], sta1[2]];
+                    room.players[id2] = [sta2[0], sta2[1] + 1, sta2[2]];
+                } else {
+                    room.players[id2] = [sta2[0] + 1, sta2[1], sta2[2]];
+                    room.players[id1] = [sta1[0], sta1[1] + 1, sta1[2]];
+                }
+            } else if (!data.arr.includes('')) {
+                room.draw += 1;
+            }
+
+            const dt = {
+                roomid: data.roomid,
+                game_status: room.game_status,
+                draw: room.draw,
+                turn: room.turn,
+                pl1,
+                pl2,
+                pl1_sta: room.players[id1],
+                pl2_sta: room.players[id2],
+            };
+
+            Object.keys(room.players).forEach((id) => {
+                io.to(id).emit('newGameState', dt);
+                console.log('Data sent to:', USERS[id]?.name);
+            });
+
+        } catch (error) {
+            console.error('Error handling cellClick:', error);
+        }
+    });
+
+    socket.on('disconnecting', () => {
+        try {
+            const roomid = USERS[socket.id].roomid;
+            if (!roomid) {
+                return;
+            }
+            Object.keys(ROOMS[roomid].players).forEach((id) => {
+                io.to(id).emit('discnn');
+            });
+
+        } catch (error) {
+            console.error(error.message);
+        }
+    })
+
 });
 
 server.listen(port, '0.0.0.0', () => { console.log(`server started on http://localhost:${port}`) });

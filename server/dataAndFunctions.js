@@ -1,7 +1,7 @@
 export let USERS = {
   socketID: {
     name: "Alice",
-    roomId: "roomA",
+    roomid: "roomA",
     email: "example@gmail.com"
   },
 };
@@ -11,10 +11,10 @@ export let ROOMS = {
     unique_id: "abc123",
     createdAt: Date.now(),
     createdBy: 'socketID',
-    game_status: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    game_status: ['', '', '', '', '', '', '', '', '', ''],
     players: {
-      "userId1": [1, 2],
-      "userId2": [3, 4]
+      "userId1": [1, 2, 'O'],
+      "userId2": [3, 4, 'X']
     },
     draw: 1,
     isFull: false,
@@ -51,9 +51,42 @@ export const generateRoomId = () => {
 export const checkWin = (game_status) => {
   for (let ind of game_win_chance) {
     const [a, b, c] = ind;
-    if (game_status[a] && game_status[a] === game_status[b] && game_status[a] === game_status[c]) {
+    if (game_status[a] === game_status[b] && game_status[b] === game_status[c]) {
       return true;
     }
   }
   return false;
 };
+
+export const addPlayer = (data, ID) => {
+  try {
+    
+    const roomid = data.roomid;
+    const old_id = Object.keys(USERS).find(id => USERS[id].roomid === roomid && USERS[id].name === data.name);
+    if (old_id) {
+      console.log(ROOMS[roomid].players);
+      const value = USERS[old_id];
+      delete USERS[old_id];
+      USERS[ID] = value;
+      console.log(value);
+      console.log(ROOMS[roomid].players);
+    }
+    const players = ROOMS[roomid].players;
+    const key_0 = Object.keys(players)[0];
+    const key_1 = Object.keys(players)[1];
+    const val_0 = players[key_0];
+    const val_1 = players[key_1];
+    if (!USERS[ID].email) {
+      delete players[key_1];
+      players[ID] = val_1;
+    } else {
+      delete players[key_0];
+      delete players[key_1];
+      players[ID] = val_0;
+      players[key_1] = val_1;
+      ROOMS[roomid].createdBy = ID;
+    }
+  } catch (error) {
+    console.error(error.message);
+  }
+}

@@ -27,6 +27,12 @@
     animation: fadeInDown 1s ease-out forwards;
 }
 
+.home-container .info {
+    color: #8A2BE2;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .home-container .main-heading {
     font-family: 'Permanent Marker', cursive;
     font-size: 4em;
@@ -163,19 +169,15 @@
 
 .home-container .pink-gradient {
     background: linear-gradient(135deg, #FFB6C1 0%, #FF69B4 100%);
-    animation: pulse 2s infinite alternate;
+
 }
 
 .home-container .animated-elements {
     background: linear-gradient(135deg, #FFC0CB 0%, #FF8C94 100%);
-    animation-delay: 0.5s;
-    animation: pulse 2s infinite alternate;
 }
 
 .home-container .responsive-design {
     background: linear-gradient(135deg, #eebf97 0%, #FFB6C1 100%);
-    animation-delay: 1s;
-    animation: pulse 2s infinite alternate;
 }
 
 
@@ -251,24 +253,6 @@
         text-shadow: 0 0 10px #fff, 0 0 20px #FFDAB9;
     }
 }
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    50% {
-        transform: scale(1.02);
-        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3), 0 0 15px #FF69B4;
-    }
-
-    100% {
-        transform: scale(1);
-        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-    }
-}
-
 
 @media (max-width: 900px) {
     .home-container .main-heading {

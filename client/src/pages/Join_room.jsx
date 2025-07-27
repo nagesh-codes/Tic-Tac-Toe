@@ -25,7 +25,9 @@ const Entry = () => {
     });
 
     socket.on('getInfo', (data) => {
-      navigate('/game_home', { state: data });
+      sessionStorage.setItem('player', data.pl2);
+      sessionStorage.setItem('room', roomid);
+      navigate('/game_home');
     })
 
     socket.on('changeName', () => {

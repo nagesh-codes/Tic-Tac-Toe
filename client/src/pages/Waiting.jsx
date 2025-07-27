@@ -25,7 +25,8 @@ const Waiting = () => {
     });
 
     socket.on('getInfo', (data) => {
-      navigate('/game_home', { state: data });
+      sessionStorage.setItem('player', data.pl1);
+      navigate('/game_home');
     });
 
     socket.on('serverErr', () => {
