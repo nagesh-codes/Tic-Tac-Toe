@@ -51,7 +51,8 @@ io.on('connection', (socket) => {
                 },
                 draw: 0,
                 isFull: false,
-                turn: Math.floor(Math.random() * 2)
+                turn: Math.floor(Math.random() * 2),
+                isDisabled: false
             }
             const unique = data.roomid.split("").reverse().join('');
             io.to(socket_ID).emit('roomCreated', unique);
@@ -94,9 +95,13 @@ io.on('connection', (socket) => {
     });
 
     socket.on('takeInfo', (data) => {
-        const roomid = data.roomid;
-        const ID = socket.id;
         try {
+            if (!ROOMS[data.roomid]) {
+                io.to(socket.id).emit('goToHome');
+                return;
+            }
+            const roomid = data.roomid;
+            const ID = socket.id;
             addPlayer(data, ID);
             const pl1 = USERS[Object.keys(ROOMS[roomid].players)[0]]?.name;
             const pl2 = USERS[Object.keys(ROOMS[roomid].players)[1]]?.name;
@@ -115,7 +120,7 @@ io.on('connection', (socket) => {
             io.to(ID).emit('getInfo', dt);
         } catch (e) {
             console.error(e);
-            io.to(ID).emit('serverErr');
+            io.to(socket.id).emit('serverErr');
         }
     });
 
@@ -138,6 +143,14 @@ io.on('connection', (socket) => {
                     room.players[id2] = [sta2[0] + 1, sta2[1], sta2[2]];
                     room.players[id1] = [sta1[0], sta1[1] + 1, sta1[2]];
                 }
+                io.to(socket.id).emit('youWin');
+                Object.keys(room.players).forEach((id) => {
+                    if (socket.id !== id)
+                        io.to(id).emit('youLoose');
+                });
+                // room.game_status = ['', '', '', '', '', '', '', '', ''];
+                room.turn = Math.floor(Math.random() * 2);
+                room.isDisabled = true;
             } else if (!data.arr.includes('')) {
                 room.draw += 1;
             }
@@ -150,15 +163,56 @@ io.on('connection', (socket) => {
                 pl2,
                 pl1_sta: room.players[id1],
                 pl2_sta: room.players[id2],
+                isDisabled: room.isDisabled
             };
             Object.keys(room.players).forEach((id) => {
                 io.to(id).emit('newGameState', dt);
-                console.log('Data sent to:', USERS[id]?.name);
+                if (win && id === socket.id) {
+                    io.to(id).emit('youWin');
+                } else if (win && id !== socket.id) {
+                    io.to(id).emit('youLoose');
+                }
             });
         } catch (error) {
             console.error('Error handling cellClick:', error);
         }
     });
+
+    socket.on('resetGame', (data) => {
+        try {
+            const room = ROOMS[data.roomid];
+            if (!room) return;
+            room.game_status = ['', '', '', '', '', '', '', '', ''];
+            room.isDisabled = false;
+            if (data.restart) {
+                room.players = {
+                    [Object.keys(room.players)[0]]: [0, 0, room.players[Object.keys(room.players)[0]][2]],
+                    [Object.keys(room.players)[1]]: [0, 0, room.players[Object.keys(room.players)[1]][2]]
+                };
+                room.draw = 0;
+            }
+            const pl1_id = Object.keys(room.players)[0];
+            const pl2_id = Object.keys(room.players)[1];
+            const pl1 = USERS[pl1_id]?.name;
+            const pl2 = USERS[pl2_id]?.name;
+            const dt = {
+                roomid: data.roomid,
+                game_status: room.game_status,
+                draw: room.draw,
+                turn: room.turn,
+                pl1,
+                pl2,
+                pl1_sta: room.players[pl1_id],
+                pl2_sta: room.players[pl2_id],
+                isDisabled: room.isDisabled
+            };
+            Object.keys(room.players).forEach((id) => {
+                io.to(id).emit('resetedGame', dt);
+            });
+        } catch (error) {
+            console.error('Error handling resetGame:', error);
+        }
+    })
 
     socket.on('disconnecting', () => {
         try {
