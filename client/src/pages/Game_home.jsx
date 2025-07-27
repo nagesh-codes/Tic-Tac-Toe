@@ -1,52 +1,23 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'
-import { useEffect } from 'react';
-import { useSocket } from '../components/SocketProvider'
-import { error, warning } from '../App'
-import './Game_home.css'
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSocket } from '../components/SocketProvider';
+import { error, warning } from '../App';
+import './Game_home.css';
 
 const Game_home = () => {
   const [roomid, setRoomid] = useState(sessionStorage.getItem('room') || 'Room ID');
-  const [win, setWin] = useState(10);
-  const [loose, setLoose] = useState(20);
-  const [draw, setDraw] = useState(20);
-  const [curPlayer, setCurPlayer] = useState('Nagesh');
+  const [win, setWin] = useState(0);
+  const [loose, setLoose] = useState(0);
+  const [draw, setDraw] = useState(0);
+  const [curPlayer, setCurPlayer] = useState('...');
   const { socket } = useSocket();
-  const [pl1, setPl1] = useState('player1');
-  const [pl2, setPl2] = useState('player2');
+  const [pl1, setPl1] = useState('Player 1');
+  const [pl2, setPl2] = useState('Player 2');
   const [disable, setDisable] = useState(true);
-  const player = sessionStorage.getItem('player')
+  const player = sessionStorage.getItem('player');
   const [sign, setSign] = useState('');
   const navigate = useNavigate();
-  let allCells;
-
-  useEffect(() => {
-    if (!socket) return;
-    if ((!sessionStorage.getItem('room'))) {
-      warning('Firstly Create Or Join Another`s The Room');
-      navigate("/");
-    };
-
-    socket.emit('takeInfo', ({ roomid: sessionStorage.getItem('room'), player: sessionStorage.getItem('player'), name: sessionStorage.getItem('player') }));
-
-    socket.on('getInfo', updateGameStatus);
-
-    socket.on('newGameState', (dd) => {
-      console.log(dd);
-      updateGameStatus(dd);
-    });
-
-    socket.on('discnn', () => {
-      error('Your Game Partner Is Disconnected');
-      setDisable(true);
-    });
-
-    return () => {
-      socket.off('getInfo');
-      socket.off('newGameState');
-      socket.off('discnn');
-    }
-  }, [socket]);
+  const [gameStatus, setGameStatus] = useState(Array(9).fill(''));
 
   const waitForCells = () =>
     new Promise((resolve) => {
@@ -64,7 +35,6 @@ const Game_home = () => {
   const updateGameStatus = async (data) => {
     try {
       console.log(data);
-      await waitForCells();
       setRoomid(data.roomid);
       setPl1(`${data.pl1} ${data.pl1_sta[2]}`);
       setPl2(`${data.pl2} ${data.pl2_sta[2]}`);
@@ -84,49 +54,84 @@ const Game_home = () => {
       const nextPlayer = data.turn === 0 ? data.pl1 : data.pl2;
       setCurPlayer(nextPlayer);
       setDisable(nextPlayer !== player);
+      setGameStatus(data.game_status);
 
-      allCells = document.querySelectorAll('.cell');
-      data.game_status.forEach((ele, index) => {
-        if (ele === 'X') {
-          allCells[index].textContent = 'X';
-          allCells[index].classList.add('x');
-        } else if (ele === 'O') {
-          allCells[index].textContent = 'O';
-          allCells[index].classList.add('o');
-        }
-      });
     } catch (e) {
       console.error(e);
     }
   };
 
-
   const handleCellClick = (e) => {
-    allCells = document.querySelectorAll('.cell');
-    if (e.target.value) {
-      warning('This Box Is Already Filled!');
+    const index = Array.from(e.target.parentNode.children).indexOf(e.target);
+    if (gameStatus[index] !== '') {
+      warning('This box is already filled!');
       return;
-    };
-
-    if (player === curPlayer) {
-      e.target.textContent = sign;
-      e.target.classList.add(sign);
-    } else {
-      e.target.textContent = sign;
-      e.target.classList.add(sign);
     }
 
-    let arr = []
-    allCells.forEach((ele, i) => {
-      arr[i] = ele.textContent === '' ? '' : ele.textContent;
-    });
-    socket.emit('cellClick', { roomid, arr, player });
-  }
+    if (player === curPlayer) {
+      const newGameStatus = [...gameStatus];
+      newGameStatus[index] = sign;
+
+      socket.emit('cellClick', { roomid, arr: newGameStatus, player });
+    } else {
+      warning("It's not your turn!");
+    }
+  };
 
   const handleClick = () => {
     sessionStorage.removeItem('player');
     sessionStorage.removeItem('room');
   };
+
+  useEffect(() => {
+    const applyCellStyles = async () => {
+      const allCells = await waitForCells();
+      gameStatus.forEach((value, index) => {
+        const cell = allCells[index];
+        cell.classList.remove('x', 'o');
+        cell.textContent = '';
+        if (value === 'X' || value === 'O') {
+          cell.textContent = value;
+          cell.classList.add(value.toLowerCase());
+        }
+      });
+    };
+
+    if (gameStatus.some(cell => cell !== '')) {
+      applyCellStyles();
+    }
+
+  }, [gameStatus]);
+
+  useEffect(() => {
+    if (!socket) return;
+    if (!sessionStorage.getItem('room')) {
+      warning('Please create or join a room first.');
+      navigate("/");
+      return;
+    }
+
+    socket.emit('takeInfo', {
+      roomid: sessionStorage.getItem('room'),
+      player: sessionStorage.getItem('player'),
+      name: sessionStorage.getItem('player')
+    });
+
+    socket.on('getInfo', updateGameStatus);
+    socket.on('newGameState', updateGameStatus);
+
+    socket.on('discnn', () => {
+      error('Your game partner has disconnected.');
+      setDisable(true);
+    });
+
+    return () => {
+      socket.off('getInfo', updateGameStatus);
+      socket.off('newGameState', updateGameStatus);
+      socket.off('discnn');
+    };
+  }, [socket, navigate]);
+
 
   return (
     <>
@@ -135,7 +140,6 @@ const Game_home = () => {
           <div className="left-panel">
             <h1>Tic-Tac-Toe Fun!</h1>
             <p className="description hide">Challenge your friend in this vibrant Tic-Tac-Toe match!</p>
-
             <div className="players-display">
               <div className="player-card player-x active-player">
                 <span id="playerXName">{pl1}</span>
@@ -146,8 +150,7 @@ const Game_home = () => {
                 <i className="far fa-circle"></i>
               </div>
             </div>
-
-            <div id="gameStatus" className="game-status">It`s {curPlayer}  Turn</div>
+            <div id="gameStatus" className="game-status">It`s {curPlayer} Turn</div>
             <div className="btns">
               <button className="reset-btn">Reset Game</button>
               <button className="restart-btn">Restart Game</button>
@@ -176,7 +179,7 @@ const Game_home = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Game_home
+export default Game_home;

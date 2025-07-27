@@ -137,11 +137,11 @@
 }
 
 .game-home-container .cell.x {
-    color: #FFDAB9;
+    color: #FFDAB9 !important;
 }
 
 .game-home-container .cell.o {
-    color: #ADD8E6;
+    color: #ADD8E6 !important;
 }
 
 .game-home-container .no-click {

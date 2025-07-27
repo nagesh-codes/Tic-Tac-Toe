@@ -5,15 +5,16 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import { addPlayer, checkWin, generateRoomId, ROOMS, USERS } from './dataAndFunctions.js'
 
-dotenv.config()
-const frontend_url = process.env.FRONTEND_URL
-const frontend_url_2 = process.env.FRONTEND_URL_2
+dotenv.config();
+const frontend_url = process.env.FRONTEND_URL;
+const frontend_url_2 = process.env.FRONTEND_URL_2;
 const app = express();
 app.use(cors({
     origin: [frontend_url, frontend_url_2],
     methods: ["GET", "POST"],
     credentials: true
-}))
+}));
+
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
@@ -122,18 +123,13 @@ io.on('connection', (socket) => {
         try {
             const room = ROOMS[data.roomid];
             if (!room) return;
-
             room.game_status = data.arr;
             room.turn = room.turn === 0 ? 1 : 0;
-
             const [id1, id2] = Object.keys(room.players);
             const [sta1, sta2] = [room.players[id1], room.players[id2]];
-
             const pl1 = USERS[id1]?.name;
             const pl2 = USERS[id2]?.name;
-
             const win = checkWin(data.arr);
-
             if (win) {
                 if (pl1 === data.player) {
                     room.players[id1] = [sta1[0] + 1, sta1[1], sta1[2]];
@@ -145,7 +141,6 @@ io.on('connection', (socket) => {
             } else if (!data.arr.includes('')) {
                 room.draw += 1;
             }
-
             const dt = {
                 roomid: data.roomid,
                 game_status: room.game_status,
@@ -156,12 +151,10 @@ io.on('connection', (socket) => {
                 pl1_sta: room.players[id1],
                 pl2_sta: room.players[id2],
             };
-
             Object.keys(room.players).forEach((id) => {
                 io.to(id).emit('newGameState', dt);
                 console.log('Data sent to:', USERS[id]?.name);
             });
-
         } catch (error) {
             console.error('Error handling cellClick:', error);
         }
