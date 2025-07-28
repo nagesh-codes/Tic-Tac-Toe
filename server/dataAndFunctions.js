@@ -52,7 +52,6 @@ export const generateRoomId = () => {
 export const roomDeletion = () => {
   Object.values(ROOMS).map((val) => {
     if ((Date.now() - val.createdAt) >= (2 * 60 * 60 * 1000)) {
-      console.log(val.unique_id.split('').reverse().join(''))
       delete ROOMS[val.unique_id.split('').reverse().join('')];
     }
   });
