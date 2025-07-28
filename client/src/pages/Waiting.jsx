@@ -13,7 +13,7 @@ const Waiting = () => {
   const { socket } = useSocket();
 
   useEffect(() => {
-    if (!sessionStorage.getItem('uni')) {
+    if (!sessionStorage.getItem('player')) {
       navigate("/");
     }
     if (!socket) return;
