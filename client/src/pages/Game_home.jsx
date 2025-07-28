@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSocket } from '../components/SocketProvider';
 import { error, success, warning } from '../App';
+import winning from '../assets/winning.gif';
+import lose from '../assets/lose.gif';
 import './Game_home.css';
 
 const Game_home = () => {
