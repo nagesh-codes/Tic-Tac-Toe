@@ -26,8 +26,7 @@ const Create_room = () => {
             setRoomid(data);
         });
 
-        socket.on('roomCreated', (data) => {
-            sessionStorage.setItem('uni', data);
+        socket.on('roomCreated', () => {
             success('Room Successfully Created');
             navigate("/waiting_area");
         });

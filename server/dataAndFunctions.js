@@ -65,12 +65,9 @@ export const addPlayer = (data, ID) => {
     const roomid = data.roomid;
     const old_id = Object.keys(USERS).find(id => USERS[id].roomid === roomid && USERS[id].name === data.name);
     if (old_id) {
-      console.log(ROOMS[roomid].players);
       const value = USERS[old_id];
       delete USERS[old_id];
       USERS[ID] = value;
-      console.log(value);
-      console.log(ROOMS[roomid].players);
     }
     const players = ROOMS[roomid].players;
     const key_0 = Object.keys(players)[0];

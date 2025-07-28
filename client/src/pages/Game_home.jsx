@@ -4,6 +4,7 @@ import { useSocket } from '../components/SocketProvider';
 import { error, success, warning } from '../App';
 import winning from '../assets/winning.gif';
 import lose from '../assets/lose.gif';
+import Draw from '../assets/draw.gif';
 import './Game_home.css';
 
 const Game_home = () => {
@@ -20,6 +21,7 @@ const Game_home = () => {
   const [sign, setSign] = useState('');
   const [gameStatus, setGameStatus] = useState(Array(9).fill(''));
   const [gif, setGif] = useState('');
+  const [showImg, setShowImg] = useState(false);
   const navigate = useNavigate();
 
   const waitForCells = () =>
@@ -37,6 +39,11 @@ const Game_home = () => {
 
   const updateGameStatus = async (data) => {
     try {
+      if (data.isDraw) {
+        setGif(Draw);
+        setShowImg(true);
+        success('It\'s a Draw!');
+      }
       setRoomid(data.roomid);
       setPl1(`${data.pl1} ${data.pl1_sta[2]}`);
       setPl2(`${data.pl2} ${data.pl2_sta[2]}`);
@@ -84,8 +91,7 @@ const Game_home = () => {
   };
 
   const handleClick = () => {
-    sessionStorage.removeItem('player');
-    sessionStorage.removeItem('room');
+    socket.emit('leaveRoom', { roomid })
   };
 
   const handleReset = () => {
@@ -141,11 +147,13 @@ const Game_home = () => {
 
     socket.on('youWin', () => {
       setGif(winning);
+      setShowImg(true);
       success('You Win!');
     })
 
     socket.on('youLoose', () => {
       setGif(lose);
+      setShowImg(true);
       error(`You Lose!`);
     });
 
@@ -159,7 +167,28 @@ const Game_home = () => {
         cell.classList.remove('x', 'o');
         cell.textContent = '';
       });
+      setShowImg(false);
+      success('Game has been reset!');
       updateGameStatus(data);
+    });
+
+    socket.on('serverErr', () => {
+      error('Server Error! Please try again later.');
+    });
+
+    socket.on('partnerLeft', (data) => {
+      error('Your game partner has left the room.');
+      setDisable(true);
+      setCurPlayer('...');
+      setGameStatus(Array(9).fill(''));
+      setPl1('Player 1');
+      setPl2('Player 2');
+      setWin(0);
+      setLoose(0);
+      setDraw(0);
+      sessionStorage.removeItem('room');
+      sessionStorage.removeItem('player');
+      navigate('/');
     })
 
     return () => {
@@ -182,11 +211,11 @@ const Game_home = () => {
             <h1>Tic-Tac-Toe Fun!</h1>
             <p className="description hide">Challenge your friend in this vibrant Tic-Tac-Toe match!</p>
             <div className="players-display">
-              <div className={`player-card player-x ${curPlayer === pl1 && player === pl1 ? 'active-player' : ''}`}>
+              <div className={`player-card player-x ${curPlayer === player ? 'active-player' : ''}`}>
                 <span id="playerXName">{pl1}</span>
                 <i className="fas fa-times"></i>
               </div>
-              <div className={`player-card player-0 ${curPlayer === pl1 && player === pl1 ? '' : 'active-player'}`}>
+              <div className={`player-card player-0 ${curPlayer === player ? 'active-player' : ''}`}>
                 <span id="playerOName">{pl2}</span>
                 <i className="far fa-circle"></i>
               </div>
@@ -196,12 +225,12 @@ const Game_home = () => {
               <button className="reset-btn" onClick={handleReset}>Reset Game</button>
               <button className="restart-btn" onClick={handleRestart}>Restart Game</button>
             </div>
-            <Link className="home-btn" to={"/"} onClick={handleClick}>Go To Home</Link>
+            <Link className="home-btn" to={"/"} onClick={handleClick}>Leave The Room</Link>
           </div>
 
           <div className="right-panel">
             <div className="celebration">
-              <img src={gif} alt={gif} />
+              {showImg ? <img src={gif} alt={gif} /> : ''}
             </div>
             <div id="gameBoard" className="game-board">
               <div className={`cell ${disable ? 'no-click' : ''}`} onClick={handleCellClick}></div>
