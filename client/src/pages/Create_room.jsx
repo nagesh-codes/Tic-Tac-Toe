@@ -87,7 +87,7 @@ const Create_room = () => {
                             </div>
                             <div className="description">
                                 <h5>Room Expiry Notice</h5>
-                                Once a room is created, it will remain active for up to 3 hours. After this time, the room will be automatically deleted to ensure server efficiency and security. Make sure both players join and complete the game within this time frame.
+                                Once a room is created, it will remain active for up to 2 hours. After this time, the room will be automatically deleted to ensure server efficiency and security. Make sure both players join and complete the game within this time frame.
                             </div>
                         </div>
 
