@@ -3,7 +3,7 @@ import { Server } from 'socket.io'
 import http from 'http'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import { addPlayer, checkWin, generateRoomId, ROOMS, USERS } from './dataAndFunctions.js'
+import { addPlayer, checkWin, generateRoomId, roomDeletion, ROOMS, USERS } from './dataAndFunctions.js'
 
 dotenv.config();
 const frontend_url = process.env.FRONTEND_URL;
@@ -26,6 +26,7 @@ const io = new Server(server, {
 const port = 5555;
 
 io.on('connection', (socket) => {
+    roomDeletion();
 
     socket.on('get-id', () => {
         const id = generateRoomId();
@@ -101,7 +102,7 @@ io.on('connection', (socket) => {
             }
             const roomid = data.roomid;
             const ID = socket.id;
-            addPlayer(data, ID);
+            const ret_id = addPlayer(data, ID);
             const pl1 = USERS[Object.keys(ROOMS[roomid].players)[0]]?.name;
             const pl2 = USERS[Object.keys(ROOMS[roomid].players)[1]]?.name;
             const pl1_sta = Object.values(ROOMS[roomid].players)[0];
@@ -116,6 +117,7 @@ io.on('connection', (socket) => {
                 pl1_sta,
                 pl2_sta
             };
+            io.to(ret_id).emit('partnerJoined');
             io.to(ID).emit('getInfo', dt);
         } catch (e) {
             console.error(e);

@@ -52,7 +52,7 @@
 }
 
 .join-container .description {
-    font-family: 'Dancing Script', cursive;
+    font-family: cursive;
     background-color: rgb(151, 73, 215);
     padding: 10px;
     border-left: 4px solid #fff;
@@ -96,7 +96,7 @@
     color: #FF69B4;
 }
 
-.join-container input::placeholder{
+.join-container input::placeholder {
     color: #FF69B4;
 }
 
@@ -155,6 +155,10 @@
 }
 
 @media (max-width: 479px) and (min-width: 379px) {
+    .join-container .description {
+        font-family: sans-serif;
+    }
+
     .join-container .middle {
         display: flex;
         flex-direction: column;
@@ -172,6 +176,10 @@
 }
 
 @media (max-width: 379px) {
+    .join-container .description {
+        font-family: sans-serif;
+    }
+
     .join-container .middle {
         display: flex;
         flex-direction: column;

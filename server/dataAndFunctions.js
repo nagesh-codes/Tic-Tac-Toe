@@ -8,13 +8,13 @@ export let USERS = {
 
 export let ROOMS = {
   "roomA": {
-    unique_id: "abc123",
+    unique_id: "Amoor",
     createdAt: Date.now(),
     createdBy: 'socketID',
     game_status: ['', '', '', '', '', '', '', '', '', ''],
     players: {
-      "userId1": [1, 2, 'O'],
-      "userId2": [3, 4, 'X']
+      "userId1": [0, 0, 'O'],
+      "userId2": [0, 0, 'X']
     },
     draw: 1,
     isFull: false,
@@ -49,6 +49,15 @@ export const generateRoomId = () => {
   return result;
 }
 
+export const roomDeletion = () => {
+  Object.values(ROOMS).map((val) => {
+    if ((Date.now() - val.createdAt) >= (2 * 60 * 60 * 1000)) {
+      console.log(val.unique_id.split('').reverse().join(''))
+      delete ROOMS[val.unique_id.split('').reverse().join('')];
+    }
+  });
+}
+
 export const checkWin = (game_status) => {
   for (let ind of game_win_chance) {
     const [a, b, c] = ind;
@@ -61,7 +70,7 @@ export const checkWin = (game_status) => {
 
 export const addPlayer = (data, ID) => {
   try {
-
+    let ret_id = ID;
     const roomid = data.roomid;
     const old_id = Object.keys(USERS).find(id => USERS[id].roomid === roomid && USERS[id].name === data.name);
     if (old_id) {
@@ -77,13 +86,16 @@ export const addPlayer = (data, ID) => {
     if (!USERS[ID].email) {
       delete players[key_1];
       players[ID] = val_1;
+      ret_id = key_0;
     } else {
       delete players[key_0];
       delete players[key_1];
       players[ID] = val_0;
       players[key_1] = val_1;
       ROOMS[roomid].createdBy = ID;
+      ret_id = key_1;
     }
+    return ret_id;
   } catch (error) {
     console.error(error.message);
   }

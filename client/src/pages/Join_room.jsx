@@ -4,7 +4,6 @@ import { useSocket } from '../components/SocketProvider';
 import { useEffect } from 'react';
 import { error, success, warning } from '../App';
 import "./join_room.css"
-import "../App.css"
 
 const Entry = () => {
   const [roomid, setRoomid] = useState('');

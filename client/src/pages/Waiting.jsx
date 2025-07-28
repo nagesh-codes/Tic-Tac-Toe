@@ -46,7 +46,7 @@ const Waiting = () => {
       <div className="waiting-container">
         <div className="wrapper">
           <div className="main-heading">
-            Waiting Area!
+            Waiting For Your Game Partner!
           </div>
           <div className="middle">
             <div className="left-side">
@@ -56,7 +56,7 @@ const Waiting = () => {
             </div>
             <div className="right-side">
               <div className="description">
-                The host waits here for a friend to join the private game. Once both players are connected, the game starts automatically. A simple real-time lobby to begin the match smoothly.
+                We waits here for your friend to join the private game. Once both players are connected, the game starts automatically. A simple real-time lobby to begin the match smoothly.
               </div>
               <div className="room-id description">RoomID is : <span>{roomid}</span></div>
             </div>

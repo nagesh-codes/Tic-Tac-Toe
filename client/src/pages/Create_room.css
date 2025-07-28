@@ -52,7 +52,7 @@
 }
 
 .create-container .description {
-    font-family: 'Dancing Script', cursive;
+    font-family: cursive;
     background-color: rgb(151, 73, 215);
     padding: 10px;
     border-left: 4px solid #fff;
@@ -179,6 +179,10 @@
 }
 
 @media (max-width: 479px) and (min-width: 379px) {
+    .create-container .description {
+        font-family: sans-serif;
+    }
+
     .create-container .main-heading {
         font-size: 0.8rem;
         margin-top: -20px;
@@ -210,6 +214,10 @@
 }
 
 @media (max-width: 379px) {
+    .create-container .description {
+        font-family: sans-serif;
+    }
+
     .create-container .main-heading {
         font-size: 0.7rem;
     }

@@ -1,11 +1,11 @@
 import { Route, Routes } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast'
-import Join_room from './pages/Join_room'
 import Home from './pages/Home'
-import Game_home from './pages/Game_home'
+import Join_room from './pages/Join_room'
 import Create_room from './pages/Create_room'
-import './App.css'
 import Waiting from './pages/Waiting'
+import Game_home from './pages/Game_home'
+import './App.css'
 
 const closeButton = (t, color) => (
   <button

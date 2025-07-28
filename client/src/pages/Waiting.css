@@ -61,7 +61,7 @@
 
 
 .waiting-container .right-side .description {
-    font-family: 'Dancing Script', cursive;
+    font-family: cursive;
     width: 100%;
     font-size: 1.2rem;
     color: white;
@@ -77,6 +77,13 @@
 .waiting-container .right-side .description:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 25px rgb(60, 29, 85);
+}
+
+.waiting-container .right-side .room-id span {
+    font-family: 'sans-serif';
+    font-size: 1.2rem;
+    font-weight: bolder;
+    color: #fff;
 }
 
 .waiting-container .gif_area img {
@@ -111,6 +118,7 @@
     }
 
     .waiting-container .left-side .description {
+        font-family: sans-serif;
         font-size: 1rem;
         padding: 15px;
     }

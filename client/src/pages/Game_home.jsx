@@ -12,7 +12,7 @@ const Game_home = () => {
   const [win, setWin] = useState(0);
   const [loose, setLoose] = useState(0);
   const [draw, setDraw] = useState(0);
-  const [curPlayer, setCurPlayer] = useState('...');
+  const [curPlayer, setCurPlayer] = useState('');
   const { socket } = useSocket();
   const [pl1, setPl1] = useState('Player 1');
   const [pl2, setPl2] = useState('Player 2');
@@ -22,6 +22,7 @@ const Game_home = () => {
   const [gameStatus, setGameStatus] = useState(Array(9).fill(''));
   const [gif, setGif] = useState('');
   const [showImg, setShowImg] = useState(false);
+  const [disCurPla, setDisCurPla] = useState('...')
   const navigate = useNavigate();
 
   const waitForCells = () =>
@@ -68,6 +69,7 @@ const Game_home = () => {
       } else {
         setDisable(nextPlayer !== player);
       }
+      setDisCurPla(player === nextPlayer ? 'Your' : nextPlayer);
     } catch (e) {
       console.error(e);
     }
@@ -176,29 +178,32 @@ const Game_home = () => {
       error('Server Error! Please try again later.');
     });
 
-    socket.on('partnerLeft', (data) => {
+    socket.on('partnerLeft', () => {
       error('Your game partner has left the room.');
-      setDisable(true);
-      setCurPlayer('...');
-      setGameStatus(Array(9).fill(''));
-      setPl1('Player 1');
-      setPl2('Player 2');
-      setWin(0);
-      setLoose(0);
-      setDraw(0);
       sessionStorage.removeItem('room');
       sessionStorage.removeItem('player');
-      navigate('/');
+      if (window.confirm('You Want To Leave? Your Partner is Quited!')) {
+        navigate('/');
+      } else {
+        alert('Your Room Data Is All Cleared From The Server. So Do Not Refresh This Page, If You Refresh This Page Then You Will Be Directed To The Home Page!');
+      }
+    });
+
+    socket.on('partnerJoined', () => {
+      success('Your game partner is connected!');
     })
 
     return () => {
-      socket.off('getInfo', updateGameStatus);
-      socket.off('newGameState', updateGameStatus);
+      socket.off('getInfo');
+      socket.off('newGameState');
       socket.off('discnn');
       socket.off('youWin');
       socket.off('youLoose');
       socket.off('goToHome');
-      socket.off('resetedGame', updateGameStatus);
+      socket.off('resetedGame');
+      socket.off('partnerJoined');
+      socket.on('partnerLeft');
+      socket.off('serverErr');
     };
   }, [socket, navigate]);
 
@@ -211,16 +216,14 @@ const Game_home = () => {
             <h1>Tic-Tac-Toe Fun!</h1>
             <p className="description hide">Challenge your friend in this vibrant Tic-Tac-Toe match!</p>
             <div className="players-display">
-              <div className={`player-card player-x ${curPlayer === player ? 'active-player' : ''}`}>
+              <div className={`player-card player-x ${curPlayer === pl1.split(" ")[0] ? 'active-player' : ''}`}>
                 <span id="playerXName">{pl1}</span>
-                <i className="fas fa-times"></i>
               </div>
-              <div className={`player-card player-0 ${curPlayer === player ? 'active-player' : ''}`}>
+              <div className={`player-card player-0 ${curPlayer === pl2.split(" ")[0] ? 'active-player' : ''}`}>
                 <span id="playerOName">{pl2}</span>
-                <i className="far fa-circle"></i>
               </div>
             </div>
-            <div id="gameStatus" className="game-status">It`s {curPlayer} Turn</div>
+            <div id="gameStatus" className="game-status">It`s {disCurPla} Turn</div>
             <div className="btns">
               <button className="reset-btn" onClick={handleReset}>Reset Game</button>
               <button className="restart-btn" onClick={handleRestart}>Restart Game</button>
