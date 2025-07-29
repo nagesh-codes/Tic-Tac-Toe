@@ -87,7 +87,7 @@ const Game_home = () => {
     if (player === curPlayer) {
       const newGameStatus = [...gameStatus];
       newGameStatus[index] = sign;
-
+      setGameStatus(newGameStatus);
       socket.emit('cellClick', { roomid, arr: newGameStatus, player });
     } else {
       warning("It's not your turn!");
