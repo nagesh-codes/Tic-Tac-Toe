@@ -24,6 +24,10 @@ const io = new Server(server, {
 })
 const port = 5555;
 
+app.get('/ping', (req, res) => {
+    res.send({ staus: 'online' });
+})
+
 io.on('connection', (socket) => {
     roomDeletion();
 
