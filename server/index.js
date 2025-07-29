@@ -22,7 +22,7 @@ const io = new Server(server, {
         credentials: true
     }
 })
-const port = 5555;
+const port = process.env.PORT || 3400;
 
 app.get('/ping', (req, res) => {
     res.send({ staus: 'online' });
