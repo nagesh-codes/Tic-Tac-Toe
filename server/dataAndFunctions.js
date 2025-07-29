@@ -1,11 +1,23 @@
+import nodemailer from 'nodemailer'
+import dotenv from 'dotenv'
+
+dotenv.config()
+
+export let USERS = {};
+/*
+sample! how players data will be save in USERS object
 export let USERS = {
   socketID: {
-    name: "Alice",
-    roomid: "roomA",
-    email: "example@gmail.com"
+      name: "Alice",
+      roomid: "roomA",
+      email: "example@gmail.com"
   },
-};
+}
+*/
 
+export let ROOMS = {};
+/*
+sample! how rooms data will be stored in ROOMS object
 export let ROOMS = {
   "roomA": {
     unique_id: "Amoor",
@@ -22,6 +34,7 @@ export let ROOMS = {
     isDisabled: false
   }
 };
+*/
 
 const game_win_chance = [
   [0, 1, 2],
@@ -36,7 +49,7 @@ const game_win_chance = [
 
 
 export const generateRoomId = () => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
   let result;
   const charactersLength = characters.length;
   const length = 6;
@@ -52,9 +65,59 @@ export const generateRoomId = () => {
 export const roomDeletion = () => {
   Object.values(ROOMS).map((val) => {
     if ((Date.now() - val.createdAt) >= (2 * 60 * 60 * 1000)) {
+      sendMail(USERS[val.createdBy]);
       delete ROOMS[val.unique_id.split('').reverse().join('')];
     }
   });
+}
+
+const sendMail = (data) => {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: `${process.env.EMAIL}`,
+      pass: `${process.env.APP_PASSWORD}`
+    },
+  });
+  const mailOptions = {
+    from: `${process.env.EMAIL}`,
+    to: data.email,
+    subject: 'Your Tic-Tac-Toe Room Has Been Deleted',
+    html: `<!DOCTYPE html>
+    <html>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+      <h2>Hello ${data.name},</h2>
+
+      <p>
+        We wanted to let you know that your Tic-Tac-Toe game room 
+        <strong>"ROOM-${data.roomid}"</strong> has been successfully deleted.
+      </p>
+
+      <p>
+        If you'd like to play again, you're always welcome back!
+      </p>
+
+      <p style="text-align: center; margin: 30px 0;">
+        <a
+          href="${process.env.FRONTEND_URL}"
+          style="background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+          🎮 Back to Play
+        </a>
+      </p>
+
+      <p>
+        Thank you for playing with us!<br />
+        - The Tic-Tac-Toe Team
+      </p>
+    </body>
+    </html>`,
+  };
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return console.log('Error Sending Email:', error.message);
+    }
+    console.log('Email Successfully sended to : ', data.email);
+  })
 }
 
 export const checkWin = (game_status) => {

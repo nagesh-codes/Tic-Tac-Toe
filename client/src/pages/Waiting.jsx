@@ -16,6 +16,11 @@ const Waiting = () => {
     if (!sessionStorage.getItem('player')) {
       navigate("/");
     }
+
+    if (sessionStorage.getItem('player') && sessionStorage.getItem('room')) {
+      navigate("/game_home");
+    }
+
     if (!socket) return;
 
     setRoomid(sessionStorage.getItem('room'));
@@ -35,7 +40,6 @@ const Waiting = () => {
 
     return () => {
       socket.off('partnerJoined');
-      socket.off('giveInfo');
       socket.off('getInfo');
       socket.off('serverErr');
     };
