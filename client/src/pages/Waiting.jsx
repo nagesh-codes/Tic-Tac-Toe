@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import cat1 from '../assets/cat1.gif'
 import cat2 from '../assets/cat2.gif'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
@@ -13,7 +12,7 @@ const Waiting = () => {
   const { socket } = useSocket();
 
   useEffect(() => {
-    if (!sessionStorage.getItem('player')) {
+    if (!sessionStorage.getItem('wait')) {
       navigate("/");
     }
 
@@ -55,7 +54,7 @@ const Waiting = () => {
           <div className="middle">
             <div className="left-side">
               <div className="gif_area">
-                <img src={cat1} alt="Loading..." />
+                <img src={cat2} alt="Loading..." />
               </div>
             </div>
             <div className="right-side">

@@ -43,6 +43,7 @@ const Game_home = () => {
       if (data.isDraw) {
         setGif(Draw);
         setShowImg(true);
+        setDisCurPla('You Both Have Same IQ!');
         success('It\'s a Draw!');
       }
       setRoomid(data.roomid);
@@ -69,9 +70,10 @@ const Game_home = () => {
       } else {
         setDisable(nextPlayer !== player);
       }
-      setDisCurPla(player === nextPlayer ? 'Your' : nextPlayer);
+      const txt = `It's ${player === nextPlayer ? 'Your' : nextPlayer} Turn`;
+      setDisCurPla(txt);
     } catch (e) {
-      console.error(e);
+      console.error(e.message);
     }
   };
 
@@ -93,11 +95,13 @@ const Game_home = () => {
   };
 
   const handleClick = () => {
+    sessionStorage.removeItem('room');
+    sessionStorage.removeItem('player');
+    sessionStorage.removeItem('wait');
     socket.emit('leaveRoom', { roomid })
   };
 
   const handleReset = () => {
-    // if (window.confirm('Are you sure you want to reset the game?')) {}
     socket.emit('resetGame', { roomid });
   }
 
@@ -150,11 +154,13 @@ const Game_home = () => {
     socket.on('youWin', () => {
       setGif(winning);
       setShowImg(true);
+      setDisCurPla('You Won The Match!')
       success('You Win!');
     })
 
     socket.on('youLoose', () => {
       setGif(lose);
+      setDisCurPla('You Lose The Match!')
       setShowImg(true);
       error(`You Lose!`);
     });
@@ -223,7 +229,7 @@ const Game_home = () => {
                 <span id="playerOName">{pl2}</span>
               </div>
             </div>
-            <div id="gameStatus" className="game-status">It`s {disCurPla} Turn</div>
+            <div id="gameStatus" className="game-status">{disCurPla}</div>
             <div className="btns">
               <button className="reset-btn" onClick={handleReset}>Reset Game</button>
               <button className="restart-btn" onClick={handleRestart}>Restart Game</button>

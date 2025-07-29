@@ -28,6 +28,7 @@ const Create_room = () => {
 
         socket.on('roomCreated', () => {
             success('Room Successfully Created');
+            sessionStorage.setItem('wait', true);
             navigate("/waiting_area");
         });
 
@@ -40,7 +41,7 @@ const Create_room = () => {
             socket.off('roomCreated',);
             socket.off('serverErr');
         };
-    }, [socket, connected])
+    }, [socket, connected]);
 
     const handleForm = (e) => {
         e.preventDefault();
@@ -106,7 +107,7 @@ const Create_room = () => {
                             <div className="input-field">
                                 <label htmlFor="name">Your Email ID</label>
                                 <input
-                                    type="text"
+                                    type="email"
                                     placeholder='Enter Your email ID'
                                     value={email}
                                     onInput={e => setEmail(e.target.value.trim())}
@@ -117,7 +118,6 @@ const Create_room = () => {
                                 <label htmlFor="name">Your Room ID</label>
                                 <input
                                     type="text"
-                                    placeholder='Enter The Room ID'
                                     value={roomid}
                                     onInput={e => setRoomid(e.target.value)}
                                     readOnly

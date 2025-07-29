@@ -7,10 +7,9 @@ import { addPlayer, checkWin, generateRoomId, roomDeletion, ROOMS, USERS } from 
 
 dotenv.config();
 const frontend_url = process.env.FRONTEND_URL;
-const frontend_url_2 = process.env.FRONTEND_URL_2;
 const app = express();
 app.use(cors({
-    origin: [frontend_url, frontend_url_2],
+    origin: [frontend_url],
     methods: ["GET", "POST"],
     credentials: true
 }));
@@ -18,7 +17,7 @@ app.use(cors({
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: [frontend_url, frontend_url_2],
+        origin: [frontend_url],
         methods: ["GET", "POST"],
         credentials: true
     }
@@ -89,7 +88,7 @@ io.on('connection', (socket) => {
                 io.to(ID).emit('RoomJoin');
             }
         } catch (e) {
-            console.error(e);
+            console.error(e.message);
             io.to(ID).emit('serverErr');
         }
     });
@@ -115,12 +114,13 @@ io.on('connection', (socket) => {
                 pl1,
                 pl2,
                 pl1_sta,
-                pl2_sta
+                pl2_sta,
+                isDisabled: ROOMS[roomid].isDisabled,
             };
             io.to(ret_id).emit('partnerJoined');
             io.to(ID).emit('getInfo', dt);
         } catch (e) {
-            console.error(e);
+            console.error(e.message);
             io.to(socket.id).emit('serverErr');
         }
     });
@@ -172,7 +172,7 @@ io.on('connection', (socket) => {
                 }
             });
         } catch (error) {
-            console.error('Error handling cellClick:', error);
+            console.error('Error handling cellClick:', error.message);
         }
     });
 
@@ -208,7 +208,7 @@ io.on('connection', (socket) => {
                 io.to(id).emit('resetedGame', dt);
             });
         } catch (error) {
-            console.error('Error handling resetGame:', error);
+            console.error('Error handling resetGame:', error.message);
         }
     });
 
@@ -233,7 +233,7 @@ io.on('connection', (socket) => {
             const remainingPlayerName = USERS[remainingPlayerId]?.name;
             io.to(remainingPlayerId).emit('partnerLeft', remainingPlayerName);
         } catch (error) {
-            console.error('Error handling leaveRoom:', error);
+            console.error('Error handling leaveRoom:', error.message);
         }
     })
 
@@ -253,4 +253,4 @@ io.on('connection', (socket) => {
 
 });
 
-server.listen(port, '0.0.0.0', () => { console.log(`server started on http://localhost:${port}`) });
+server.listen(port, '0.0.0.0', () => { console.log(`server started on port:${port}`) });

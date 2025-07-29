@@ -1,7 +1,14 @@
 import { Link } from 'react-router-dom';
 import './Home.css';
+import { useEffect } from 'react';
 
 const Home = () => {
+
+  useEffect(() => {
+    sessionStorage.removeItem('player');
+    sessionStorage.removeItem('room');
+    sessionStorage.removeItem('wait');
+  }, [])
 
   const scrollBottom = () => {
     window.scrollTo({

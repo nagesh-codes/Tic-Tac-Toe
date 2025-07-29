@@ -64,6 +64,11 @@
 
 .game-home-container .celebration {
     position: absolute;
+    z-index: 100;
+}
+
+.game-home-container .celebration img {
+    z-index: 1000;
 }
 
 .game-home-container .players-display {
@@ -87,7 +92,7 @@
     align-items: center;
     border: 2px solid transparent;
     transition: 0.3s;
-    cursor: pointer;
+    cursor: default;
 }
 
 .game-home-container .player-card i {
@@ -442,11 +447,6 @@
 
     .game-home-container .wrapper h1 {
         font-size: 1.4rem;
-    }
-
-    .game-home-container .wrapper .players-display {
-        flex-direction: column;
-        gap: 5px;
     }
 
     .game-home-container .wrapper .game-board {

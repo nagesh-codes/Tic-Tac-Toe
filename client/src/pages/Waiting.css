@@ -135,3 +135,15 @@
         height: 80px;
     }
 }
+
+@media (max-width: 479px) and (min-width: 379px) {
+    .waiting-container .left-side .description {
+        font-family: sans-serif;
+    }
+}
+
+@media (max-width: 379px) {
+    .waiting-container .left-side .description {
+        font-family: sans-serif;
+    }
+}
