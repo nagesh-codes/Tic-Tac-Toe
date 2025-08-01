@@ -40,12 +40,6 @@ const Game_home = () => {
 
   const updateGameStatus = async (data) => {
     try {
-      if (data.isDraw) {
-        setGif(Draw);
-        setShowImg(true);
-        setDisCurPla('You Both Have Same IQ!');
-        success('It\'s a Draw!');
-      }
       setRoomid(data.roomid);
       setPl1(`${data.pl1} ${data.pl1_sta[2]}`);
       setPl2(`${data.pl2} ${data.pl2_sta[2]}`);
@@ -72,6 +66,12 @@ const Game_home = () => {
       }
       const txt = `It's ${player === nextPlayer ? 'Your' : nextPlayer} Turn`;
       setDisCurPla(txt);
+      if (data.draw) {
+        setGif(Draw);
+        setShowImg(true);
+        setDisCurPla('You Both Have Same IQ!');
+        success('It\'s a Draw!');
+      }
     } catch (e) {
       console.error(e.message);
     }

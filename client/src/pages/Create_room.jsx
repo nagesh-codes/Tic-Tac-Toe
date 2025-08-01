@@ -83,7 +83,7 @@ const Create_room = () => {
                             <div className="description hide">
                                 Ready to set up your own exclusive space? Create a new private room in just a few clicks! We generate a unique private code that you can share with friends, family, or colleagues.
                             </div>
-                            <div className="description hide">
+                            <div className="description hide hide-m">
                                 Once created, your private room is ready for your group to join, offering a secure and dedicated environment for your activities. It's simple, quick, and puts you in control.
                             </div>
                             <div className="description">

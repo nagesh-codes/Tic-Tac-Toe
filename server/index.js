@@ -43,7 +43,8 @@ io.on('connection', (socket) => {
             USERS[socket_ID] = {
                 name: data.name,
                 roomid: data.roomid,
-                email: data.email
+                email: data.email,
+                game_stat: 2
             };
             ROOMS[data.roomid] = {
                 unique_id: data.roomid.split("").reverse().join(''),
@@ -56,7 +57,8 @@ io.on('connection', (socket) => {
                 draw: 0,
                 isFull: false,
                 turn: Math.floor(Math.random() * 2),
-                isDisabled: false
+                isDisabled: false,
+                isMatchStart: false
             }
             io.to(socket_ID).emit('roomCreated');
         } catch (e) {
@@ -80,6 +82,7 @@ io.on('connection', (socket) => {
                     name: data.name,
                     email: null,
                     roomid: data.roomid,
+                    game_stat: 2
                 };
                 if (firstPlayerSign === 'X') {
                     ROOMS[data.roomid]['players'][ID] = [0, 0, 'O'];
@@ -88,6 +91,7 @@ io.on('connection', (socket) => {
                 }
                 const pl1_id = Object.keys(ROOMS[data.roomid].players)[0];
                 ROOMS[data.roomid].isFull = true;
+                ROOMS[data.roomid].isMatchStart = true;
                 io.to(pl1_id).emit('partnerJoined');
                 io.to(ID).emit('RoomJoin');
             }
@@ -103,28 +107,38 @@ io.on('connection', (socket) => {
                 io.to(socket.id).emit('goToHome');
                 return;
             }
-            const roomid = data.roomid;
-            const ID = socket.id;
-            const ret_id = addPlayer(data, ID);
-            const pl1 = USERS[Object.keys(ROOMS[roomid].players)[0]]?.name;
-            const pl2 = USERS[Object.keys(ROOMS[roomid].players)[1]]?.name;
-            const pl1_sta = Object.values(ROOMS[roomid].players)[0];
-            const pl2_sta = Object.values(ROOMS[roomid].players)[1];
-            const dt = {
-                roomid: roomid,
-                game_status: ROOMS[roomid].game_status,
-                draw: ROOMS[roomid].draw,
-                turn: ROOMS[roomid].turn,
-                pl1,
-                pl2,
-                pl1_sta,
-                pl2_sta,
-                isDisabled: ROOMS[roomid].isDisabled,
-            };
-            io.to(ret_id).emit('partnerJoined');
-            io.to(ID).emit('getInfo', dt);
+            if (ROOMS[data.roomid].isMatchStart) {
+                const roomid = data.roomid;
+                const ID = socket.id;
+                const ret_id = addPlayer(data, ID);
+                const pl1 = USERS[Object.keys(ROOMS[roomid].players)[0]]?.name;
+                const pl2 = USERS[Object.keys(ROOMS[roomid].players)[1]]?.name;
+                const pl1_sta = Object.values(ROOMS[roomid].players)[0];
+                const pl2_sta = Object.values(ROOMS[roomid].players)[1];
+                const dt = {
+                    roomid: roomid,
+                    game_status: ROOMS[roomid].game_status,
+                    draw: ROOMS[roomid].draw,
+                    turn: ROOMS[roomid].turn,
+                    pl1,
+                    pl2,
+                    pl1_sta,
+                    pl2_sta,
+                    isDisabled: ROOMS[roomid].isDisabled,
+                    isMatchStart: ROOMS[roomid].isMatchStart
+                };
+                io.to(ret_id).emit('partnerJoined');
+                io.to(ID).emit('getInfo', dt);
+                if (USERS[ID].game_stat === 1) {
+                    io.to(ID).emit('youWin');
+                } else if (USERS[ID].game_stat === 0) {
+                    io.to(ID).emit('youLoose');
+                }
+            } else {
+                io.to(socket.id).emit('getInfo', { isMatchStart: ROOMS[data.roomid].isMatchStart });
+            }
         } catch (e) {
-            console.error(e.message);
+            console.error(e);
             io.to(socket.id).emit('serverErr');
         }
     });
@@ -151,6 +165,13 @@ io.on('connection', (socket) => {
                 }
                 room.turn = Math.floor(Math.random() * 2);
                 room.isDisabled = true;
+                Object.keys(room.players).forEach((id) => {
+                    if (id == socket.id) {
+                        USERS[id].game_stat = 1;
+                    } else {
+                        USERS[id].game_stat = 0;
+                    }
+                })
             }
             if (isDraw) {
                 room.draw += 1;
@@ -208,6 +229,9 @@ io.on('connection', (socket) => {
                 pl2_sta: room.players[pl2_id],
                 isDisabled: room.isDisabled
             };
+            Object.keys(room.players).forEach((id) => {
+                USERS[id].game_stat = 2;
+            });
             Object.keys(room.players).forEach((id) => {
                 io.to(id).emit('resetedGame', dt);
             });

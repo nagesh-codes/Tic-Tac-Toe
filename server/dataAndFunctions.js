@@ -10,7 +10,8 @@ export let USERS = {
   socketID: {
       name: "Alice",
       roomid: "roomA",
-      email: "example@gmail.com"
+      email: "example@gmail.com",
+      isWin:false
   },
 }
 */

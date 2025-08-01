@@ -211,6 +211,10 @@
     .create-container .cpy-btn {
         left: 89%;
     }
+
+    .create-container .hide-m {
+        display: none;
+    }
 }
 
 @media (max-width: 379px) {
