@@ -50,7 +50,7 @@ const game_win_chance = [
 
 
 export const generateRoomId = () => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   let result;
   const charactersLength = characters.length;
   const length = 6;
