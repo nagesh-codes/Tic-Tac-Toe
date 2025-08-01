@@ -83,7 +83,7 @@ const Game_home = () => {
       warning('This box is already filled!');
       return;
     }
-
+    setDisable(true);
     if (player === curPlayer) {
       const newGameStatus = [...gameStatus];
       newGameStatus[index] = sign;
@@ -208,7 +208,7 @@ const Game_home = () => {
       socket.off('goToHome');
       socket.off('resetedGame');
       socket.off('partnerJoined');
-      socket.on('partnerLeft');
+      socket.off('partnerLeft');
       socket.off('serverErr');
     };
   }, [socket, navigate]);
