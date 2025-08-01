@@ -3,13 +3,27 @@ import cat2 from '../assets/cat2.gif'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useSocket } from '../components/SocketProvider'
-import { error } from '../App'
+import { error, success } from '../App'
 import './Waiting.css'
 
 const Waiting = () => {
-  const [roomid, setRoomid] = useState('')
+  const [roomid, setRoomid] = useState(sessionStorage.getItem('room') || '');
   const navigate = useNavigate();
   const { socket } = useSocket();
+
+  const handleClick = () => {
+    if (navigator && navigator.clipboard) {
+      if (roomid == '') {
+        error('Room ID not Found!');
+      } else {
+        navigator.clipboard.writeText(roomid)
+          .then(() => success('Room ID Copied!'))
+          .catch(() => error("Room ID wasn't copied."));
+      }
+    } else {
+      error('Clipboard API not supported on this browser!');
+    }
+  }
 
   useEffect(() => {
     if (!sessionStorage.getItem('wait')) {
@@ -67,7 +81,7 @@ const Waiting = () => {
               <div className="description">
                 We waits here for your friend to join the private game. Once both players are connected, the game starts automatically. A simple real-time lobby to begin the match smoothly.
               </div>
-              <div className="room-id description">RoomID is : <span>{roomid}</span></div>
+              <div className="room-id description">RoomID is : <span onClick={handleClick} className='room-id'>{roomid}</span></div>
             </div>
           </div>
         </div>

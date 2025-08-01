@@ -74,6 +74,10 @@
     transition: all 0.4s ease-in-out;
 }
 
+.waiting-container .right-side .description .room-id {
+    cursor: pointer;
+}
+
 .waiting-container .right-side .description:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 25px rgb(60, 29, 85);

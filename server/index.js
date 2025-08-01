@@ -138,7 +138,7 @@ io.on('connection', (socket) => {
                 io.to(socket.id).emit('getInfo', { isMatchStart: ROOMS[data.roomid].isMatchStart });
             }
         } catch (e) {
-            console.error(e);
+            console.error(e.message);
             io.to(socket.id).emit('serverErr');
         }
     });
