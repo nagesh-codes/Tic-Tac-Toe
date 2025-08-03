@@ -39,14 +39,12 @@ const Waiting = () => {
     setRoomid(sessionStorage.getItem('room'));
 
     socket.on('partnerJoined', () => {
-      console.log('partener joined')
       socket.emit('takeInfo', { roomid: sessionStorage.getItem('room') });
     });
 
     socket.emit('takeInfo', { roomid: sessionStorage.getItem('room') });
 
     socket.on('getInfo', (data) => {
-      console.log(data);
       if (data.isMatchStart) {
         sessionStorage.setItem('player', data.pl1);
         navigate('/game_home');

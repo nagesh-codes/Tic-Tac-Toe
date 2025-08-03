@@ -66,12 +66,6 @@ const Game_home = () => {
       }
       const txt = `It's ${player === nextPlayer ? 'Your' : nextPlayer} Turn`;
       setDisCurPla(txt);
-      if (data.draw) {
-        setGif(Draw);
-        setShowImg(true);
-        setDisCurPla('You Both Have Same IQ!');
-        success('It\'s a Draw!');
-      }
     } catch (e) {
       console.error(e.message);
     }
@@ -165,6 +159,13 @@ const Game_home = () => {
       error(`You Lose!`);
     });
 
+    socket.on('gameDraw', () => {
+      setGif(Draw);
+      setShowImg(true);
+      setDisCurPla('You Both Have Same IQ!');
+      success('It\'s a Draw!');
+    })
+
     socket.on('goToHome', () => {
       navigate('/');
     });
@@ -210,6 +211,7 @@ const Game_home = () => {
       socket.off('partnerJoined');
       socket.off('partnerLeft');
       socket.off('serverErr');
+      socket.off('gameDraw');
     };
   }, [socket, navigate]);
 
