@@ -6,11 +6,10 @@ import dotenv from 'dotenv'
 import { addPlayer, checkWin, generateRoomId, roomDeletion, ROOMS, USERS } from './dataAndFunctions.js'
 
 dotenv.config();
-const frontend_url_1 = process.env.FRONTEND_URL_1;
-const frontend_url_2 = process.env.FRONTEND_URL_2;
+const frontend_url = process.env.FRONTEND_URL;
 const app = express();
 app.use(cors({
-    origin: [frontend_url_1,frontend_url_2],
+    origin: [frontend_url],
     methods: ["GET", "POST"],
     credentials: true
 }));
@@ -18,7 +17,7 @@ app.use(cors({
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: [frontend_url_1,frontend_url_2],
+        origin: [frontend_url],
         methods: ["GET", "POST"],
         credentials: true
     }
