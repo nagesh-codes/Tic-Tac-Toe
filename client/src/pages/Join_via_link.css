@@ -1,0 +1,101 @@
+.link-container {
+    background: linear-gradient(135deg, #FF69B4, #8A2BE2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100dvh;
+    width: 100vw;
+    padding: 1rem;
+    overflow: hidden;
+}
+
+.link-container .wrapper {
+    max-width: 500px;
+    height: auto;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 20px;
+    backdrop-filter: blur(15px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 15px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    overflow: hidden;
+    scale: 0.9;
+    animation: fadeOut 0.7s ease-out forwards;
+}
+
+.link-container .main-heading {
+    font-family: 'Permanent Marker', cursive;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.link-container .input-area {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    font-weight: bolder;
+}
+
+.link-container input {
+    padding: 10px 20px;
+    border-radius: 20px;
+    outline: 0;
+    border: 0;
+    font-weight: bolder;
+    transition: all 0.3s;
+    color: #FF69B4;
+}
+
+.link-container input::placeholder {
+    color: #FF69B4;
+}
+
+.link-container button {
+    padding: 12px;
+    width: 100%;
+    text-decoration: none;
+    text-align: center;
+    margin: 0 auto;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(45deg, #FFB6C1, #FF69B4);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.link-container button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 105, 180, 0.6);
+}
+
+.link-container .info {
+    text-align: center;
+    font-weight: bolder;
+}
+
+@keyframes fadeIn {
+    100% {
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+@media (max-width: 479px) and (min-width: 379px) {
+    .link-container .wrapper {
+        width: 100%;
+    }
+}
+
+@media (max-width: 379px) {
+    .link-container .wrapper {
+        width: 100%;
+    }
+}

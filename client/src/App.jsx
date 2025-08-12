@@ -6,6 +6,7 @@ import Create_room from './pages/Create_room'
 import Waiting from './pages/Waiting'
 import Game_home from './pages/Game_home'
 import './App.css'
+import Join_via_link from './pages/Join_via_link'
 
 const closeButton = (t, color) => (
   <button
@@ -94,8 +95,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/join_room" element={<Join_room />} />
+        <Route path="/join_via_link/:id" element={<Join_via_link />} />
         <Route path="/create_room" element={<Create_room />} />
-        <Route path="/game_home" element={<Game_home />} />
+        <Route path="/game_home/:id" element={<Game_home />} />
         <Route path="/waiting_area" element={<Waiting />} />
         <Route path="*" element={<Home />} />
       </Routes>

@@ -1,13 +1,15 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Home.css';
 import { useEffect } from 'react';
 
 const Home = () => {
+  const navigate = useNavigate();
 
   useEffect(() => {
     sessionStorage.removeItem('player');
     sessionStorage.removeItem('room');
     sessionStorage.removeItem('wait');
+    navigate("/");
   }, [])
 
   const scrollBottom = () => {

@@ -1,13 +1,15 @@
-import { useEffect } from 'react'
-import cat2 from '../assets/cat2.gif'
-import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
-import { useSocket } from '../components/SocketProvider'
-import { error, success } from '../App'
-import './Waiting.css'
+import { useEffect } from 'react';
+import cat2 from '../assets/cat2.gif';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useSocket } from '../components/SocketProvider';
+import { error, success } from '../App';
+import QRCode from 'qrcode';
+import './Waiting.css';
 
 const Waiting = () => {
   const [roomid, setRoomid] = useState(sessionStorage.getItem('room') || '');
+  const [path, setPath] = useState('/join_via_link/');
   const navigate = useNavigate();
   const { socket } = useSocket();
 
@@ -25,18 +27,49 @@ const Waiting = () => {
     }
   }
 
+  const handleShareClick = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Join My Game",
+          text: "Click the link to join my game!",
+          url: (window.location.origin + path + roomid)
+        });
+        success("Link shared successfully!");
+      } catch (err) {
+        console.error(err.message);
+      }
+    } else {
+      error('Your browser does not support Web Share API.')
+    }
+  }
+
   useEffect(() => {
     if (!sessionStorage.getItem('wait')) {
       navigate("/");
     }
 
     if (sessionStorage.getItem('player') && sessionStorage.getItem('room')) {
-      navigate("/game_home");
+      navigate(`/game_home/${sessionStorage.getItem('room')}`);
     }
 
     if (!socket) return;
 
     setRoomid(sessionStorage.getItem('room'));
+
+    QRCode.toCanvas(document.getElementById("canvas"), window.location.origin + path + roomid, {
+      width: window.innerWidth < 600 ? 180 : 300,
+      color: {
+        dark: "#ffffff",
+        light: "#e854dbff"
+      }
+    }, function (er) {
+      if (er) {
+        error('QRCode is not Genrating At This Time :( ');
+        console.log(er);
+        return;
+      }
+    });
 
     socket.on('partnerJoined', () => {
       socket.emit('takeInfo', { roomid: sessionStorage.getItem('room') });
@@ -47,8 +80,12 @@ const Waiting = () => {
     socket.on('getInfo', (data) => {
       if (data.isMatchStart) {
         sessionStorage.setItem('player', data.pl1);
-        navigate('/game_home');
+        navigate(`/game_home/${sessionStorage.getItem('room')}`);
       }
+    });
+
+    socket.on('goToHome', () => {
+      navigate('/');
     });
 
     socket.on('serverErr', () => {
@@ -58,6 +95,7 @@ const Waiting = () => {
     return () => {
       socket.off('partnerJoined');
       socket.off('getInfo');
+      socket.off('goToHome');
       socket.off('serverErr');
     };
   }, [socket]);
@@ -72,7 +110,10 @@ const Waiting = () => {
           <div className="middle">
             <div className="left-side">
               <div className="gif_area">
-                <img src={cat2} alt="Loading..." />
+                <canvas id="canvas"></canvas>
+              </div>
+              <div className="shre-btn">
+                <button onClick={handleShareClick}>Share Link</button>
               </div>
             </div>
             <div className="right-side">

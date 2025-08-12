@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSocket } from '../components/SocketProvider';
 import { error, success, warning } from '../App';
 import winning from '../assets/winning.gif';
@@ -40,6 +40,9 @@ const Game_home = () => {
 
   const updateGameStatus = async (data) => {
     try {
+      if (!data.isMatchStart) {
+        navigate("/");
+      }
       setRoomid(data.roomid);
       setPl1(`${data.pl1} ${data.pl1_sta[2]}`);
       setPl2(`${data.pl2} ${data.pl2_sta[2]}`);
@@ -123,13 +126,22 @@ const Game_home = () => {
 
   }, [gameStatus]);
 
+  const { id } = useParams();
   useEffect(() => {
+    setRoomid(id);
+    sessionStorage.setItem('room', id);
+
     if (!socket) return;
-    if (!sessionStorage.getItem('room')) {
+    if (!sessionStorage.getItem('room') && !id) {
       warning('Please create or join a room first.');
       navigate("/");
       return;
     }
+    if (!sessionStorage.getItem('player')) {
+      warning('first create or join the Room!');
+      navigate("/");
+    }
+
 
     socket.emit('takeInfo', {
       roomid: sessionStorage.getItem('room'),

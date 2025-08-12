@@ -145,6 +145,25 @@ io.on('connection', (socket) => {
         }
     });
 
+    socket.on('getCreatorName', (dt) => {
+        try {
+            const room = ROOMS[dt];
+            if (!room) {
+                io.to(socket.id).emit('noRoom');
+                return;
+            }
+            const creatorName = USERS[room.createBy].name;
+            if (room.isMatchStart) {
+                io.to(socket.id).emit('not');
+            } else {
+                io.to(socket.id).emit('creator', creatorName);
+            }
+
+        } catch (error) {
+            console.log(error.message);
+        }
+    })
+
     socket.on('cellClick', (data) => {
         try {
             const room = ROOMS[data.roomid];
@@ -175,7 +194,6 @@ io.on('connection', (socket) => {
                     }
                 })
             }
-            console.log(isDraw);
             if (isDraw) {
                 room.draw += 1;
                 Object.keys(room.players).forEach((id) => {
@@ -193,6 +211,7 @@ io.on('connection', (socket) => {
                 pl1_sta: room.players[id1],
                 pl2_sta: room.players[id2],
                 isDisabled: room.isDisabled,
+                isMatchStart: room.isMatchStart,
             };
             Object.keys(room.players).forEach((id) => {
                 io.to(id).emit('newGameState', dt);
@@ -236,6 +255,7 @@ io.on('connection', (socket) => {
                 pl1_sta: room.players[pl1_id],
                 pl2_sta: room.players[pl2_id],
                 isDisabled: room.isDisabled,
+                isMatchStart: room.isMatchStart,
             };
             Object.keys(room.players).forEach((id) => {
                 USERS[id].game_stat = 3;

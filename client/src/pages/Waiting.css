@@ -49,6 +49,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+}
+
+.waiting-container .left-side .shre-btn button {
+    background: linear-gradient(135deg, #ff7eb3, #ff758c);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.waiting-container #canvas {
+    max-width: 100%;
+    height: auto;
+    width: 250px;
 }
 
 .waiting-container .right-side {
@@ -61,7 +81,7 @@
 
 
 .waiting-container .right-side .description {
-    font-family: cursive;
+    font-family: sans-serif;
     width: 100%;
     font-size: 1.2rem;
     color: white;
@@ -84,7 +104,7 @@
 }
 
 .waiting-container .right-side .room-id span {
-    font-family: 'sans-serif';
+    font-family: sans-serif;
     font-size: 1.2rem;
     font-weight: bolder;
     color: #fff;
@@ -144,10 +164,18 @@
     .waiting-container .left-side .description {
         font-family: sans-serif;
     }
+
+   .waiting-container #canvas {
+        width: 180px;
+    }
 }
 
 @media (max-width: 379px) {
     .waiting-container .left-side .description {
         font-family: sans-serif;
+    }
+
+    .waiting-container #canvas {
+        width: 140px;
     }
 }

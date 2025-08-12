@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useSocket } from '../components/SocketProvider';
 import { useEffect } from 'react';
 import { error, success, warning } from '../App';
 import "./Join_room.css"
 
 const Entry = () => {
-  const [roomid, setRoomid] = useState('');
+  const { id } = useParams();
+  const [roomid, setRoomid] = useState(id || '');
   const [name, setName] = useState('');
   const { socket, connected } = useSocket();
   const navigate = useNavigate();
@@ -20,13 +21,13 @@ const Entry = () => {
 
     socket.on('RoomJoin', () => {
       socket.emit('takeInfo', { roomid });
-      success('Successfully Joined The Room');
     });
-
+    
     socket.on('getInfo', (data) => {
       sessionStorage.setItem('player', data.pl2);
       sessionStorage.setItem('room', roomid);
-      navigate('/game_home');
+      success('Successfully Joined The Room');
+      navigate(`/game_home/${roomid}`);
     })
 
     socket.on('changeName', () => {
@@ -38,6 +39,7 @@ const Entry = () => {
       socket.off('serverErr');
       socket.off('RoomJoin');
       socket.off('changeName');
+      socket.off('getInfo');
     }
 
   })
