@@ -32,8 +32,12 @@ io.on('connection', (socket) => {
     roomDeletion();
 
     socket.on('get-id', () => {
-        const id = generateRoomId();
-        io.to(socket.id).emit('take-id', id);
+        try {
+            const id = generateRoomId();
+            io.to(socket.id).emit('take-id', id);
+        } catch (er) {
+            console.log(er.message);
+        }
     });
 
     socket.on('createRoom', (data) => {

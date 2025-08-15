@@ -50,85 +50,101 @@ const game_win_chance = [
 
 
 export const generateRoomId = () => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  let result;
-  const charactersLength = characters.length;
-  const length = 6;
-  do {
-    result = "";
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-  } while (Object.keys(ROOMS).some(room => room === result))
-  return result;
+  try {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let result;
+    const charactersLength = characters.length;
+    const length = 6;
+    do {
+      result = "";
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+    } while (Object.keys(ROOMS).some(room => room === result))
+    return result;
+  } catch (er) {
+    console.log(er.message);
+  }
 }
 
 export const roomDeletion = () => {
-  Object.values(ROOMS).map((val) => {
-    if ((Date.now() - val.createdAt) >= (2 * 60 * 60 * 1000)) {
-      sendMail(USERS[val.createdBy]);
-      delete ROOMS[val.unique_id.split('').reverse().join('')];
-    }
-  });
+  try {
+    Object.values(ROOMS).map((val) => {
+      if ((Date.now() - val.createdAt) >= (2 * 60 * 60 * 1000)) {
+        sendMail(USERS[val.createdBy]);
+        delete ROOMS[val.unique_id.split('').reverse().join('')];
+      }
+    });
+  } catch (er) {
+    console.log(er.message);
+  }
 }
 
 const sendMail = (data) => {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: `${process.env.EMAIL}`,
-      pass: `${process.env.APP_PASSWORD}`
-    },
-  });
-  const mailOptions = {
-    from: `${process.env.EMAIL}`,
-    to: data.email,
-    subject: 'Your Tic-Tac-Toe Room Has Been Deleted',
-    html: `<!DOCTYPE html>
-    <html>
-    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-      <h2>Hello ${data.name},</h2>
+  try {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: `${process.env.EMAIL}`,
+        pass: `${process.env.APP_PASSWORD}`
+      },
+    });
+    const mailOptions = {
+      from: `${process.env.EMAIL}`,
+      to: data.email,
+      subject: 'Your Tic-Tac-Toe Room Has Been Deleted',
+      html: `<!DOCTYPE html>
+              <html>
+              <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <h2>Hello ${data.name},</h2>
 
-      <p>
-        We wanted to let you know that your Tic-Tac-Toe game room 
-        <strong>"ROOM-${data.roomid}"</strong> has been successfully deleted.
-      </p>
+                <p>
+                  We wanted to let you know that your Tic-Tac-Toe game room 
+                  <strong>"ROOM-${data.roomid}"</strong> has been successfully deleted.
+                </p>
 
-      <p>
-        If you'd like to play again, you're always welcome back!
-      </p>
+                <p>
+                  If you'd like to play again, you're always welcome back!
+                </p>
 
-      <p style="text-align: center; margin: 30px 0;">
-        <a
-          href="${process.env.FRONTEND_URL}"
-          style="background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
-          🎮 Back to Play
-        </a>
-      </p>
+                <p style="text-align: center; margin: 30px 0;">
+                  <a
+                    href="${process.env.FRONTEND_URL}"
+                    style="background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                    🎮 Back to Play
+                  </a>
+                </p>
 
-      <p>
-        Thank you for playing with us!<br />
-        - The Tic-Tac-Toe Team
-      </p>
-    </body>
-    </html>`,
-  };
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      return console.log('Error Sending Email:', error.message);
-    }
-    console.log('Email Successfully sended to : ', data.email);
-  })
+                <p>
+                  Thank you for playing with us!<br />
+                  - The Tic-Tac-Toe Team
+                </p>
+              </body>
+              </html>`,
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return console.log('Error Sending Email:', error.message);
+      }
+      console.log('Email Successfully sended to : ', data.email);
+    })
+  } catch (er) {
+    console.log(er.message);
+  }
 }
 
 export const checkWin = (game_status) => {
-  for (let ind of game_win_chance) {
-    const [a, b, c] = ind;
-    if (game_status[a] === game_status[b] && game_status[b] === game_status[c] && game_status[a] !== '' && game_status[b] !== '' && game_status[c] !== '') {
-      return true;
+  try {
+    for (let ind of game_win_chance) {
+      const [a, b, c] = ind;
+      if (game_status[a] === game_status[b] && game_status[b] === game_status[c] && game_status[a] !== '' && game_status[b] !== '' && game_status[c] !== '') {
+        return true;
+      }
     }
+    return false;
+  } catch (er) {
+    console.log(er.message);
   }
-  return false;
 };
 
 export const addPlayer = (data, ID) => {
