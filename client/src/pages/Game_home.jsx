@@ -197,11 +197,11 @@ const Game_home = () => {
       error('Server Error! Please try again later.');
     });
 
-    socket.on('partnerLeft', () => {
-      error('Your game partner has left the room.');
+    socket.on('partnerLeft', (dt) => {
+      error(`Your game partner ${dt} has left the room.`);
       sessionStorage.removeItem('room');
       sessionStorage.removeItem('player');
-      if (window.confirm('You Want To Leave? Your Partner is Quited!')) {
+      if (window.confirm(`You Want To Leave? Your Game Partner ${dt} is Quited!`)) {
         navigate('/');
       } else {
         alert('Your Room Data Is All Cleared From The Server. So Do Not Refresh This Page, If You Refresh This Page Then You Will Be Directed To The Home Page!');

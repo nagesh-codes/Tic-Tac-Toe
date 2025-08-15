@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import cat2 from '../assets/cat2.gif';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useSocket } from '../components/SocketProvider';
@@ -27,6 +26,10 @@ const Waiting = () => {
     } else {
       error('Clipboard API not supported on this browser!');
     }
+  }
+
+  const handleDestroy = () => {
+    socket.emit('destroyRoom',roomid);
   }
 
   const handleShareClick = async () => {
@@ -131,7 +134,7 @@ const Waiting = () => {
                   <button onClick={handleShareClick}>Share Link</button>
                 </div>
                 <div className="shre-btn">
-                  <Link to={"/"} className='btn'>Destroy Room</Link>
+                  <Link to={"/"} className='btn' onClick={handleDestroy} >Destroy Room</Link>
                 </div>
               </div>
             </div>

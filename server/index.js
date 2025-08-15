@@ -278,18 +278,29 @@ io.on('connection', (socket) => {
                 io.to(Object.keys(players)[0]).emit('goToHome');
                 return;
             }
-            const playerId = socket.id;
-            delete USERS[playerId];
-            delete players[playerId];
-            if (Object.keys(players).length === 0) {
-                delete ROOMS[roomid];
-                return;
-            }
-            const remainingPlayerId = Object.keys(players)[0];
-            const remainingPlayerName = USERS[remainingPlayerId]?.name;
-            io.to(remainingPlayerId).emit('partnerLeft', remainingPlayerName);
+            let remainingPlayerName;
+            Object.keys(players).forEach((pla, ind) => {
+                if (pla !== socket.id) {
+                    if (ind == 0) {
+                        remainingPlayerName = Object.keys(players)[1];
+                    }
+                    io.to(pla).emit('partnerLeft', remainingPlayerName);
+                };
+                remainingPlayerName = USERS[pla].name;
+                delete USERS[pla];
+            })
+            delete ROOMS[roomid];
         } catch (error) {
             console.error('Error handling leaveRoom:', error.message);
+        }
+    });
+
+    socket.on('destroyRoom', (data) => {
+        try {
+            delete ROOMS[data];
+            delete USERS[socket.id];
+        } catch (error) {
+            console.log(error.message);
         }
     })
 
