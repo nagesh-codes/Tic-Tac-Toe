@@ -9,7 +9,8 @@
     overflow: hidden;
 }
 
-.link-container .wrapper {
+.link-container .wrapper,
+.link-container .inner {
     max-width: 500px;
     height: auto;
     background: rgba(255, 255, 255, 0.1);
@@ -27,10 +28,56 @@
     animation: fadeOut 0.7s ease-out forwards;
 }
 
+.link-container .loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.link-container .loader .outer-loader {
+    height: 100px;
+    aspect-ratio: 1;
+    border-left: #FF69B4 5px solid;
+    border-top: #8A2BE2 5px solid;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: loader 1.6s infinite linear;
+}
+
+.link-container .loader .inner-loader {
+    height: 70px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border-right: #8A2BE2 5px solid;
+    border-bottom: #FF69B4 5px solid;
+    animation: loader 0.7s infinite linear;
+    animation-direction: reverse;
+}
+
+.link-container .valid-link {
+    text-align: center;
+    font-weight: bolder;
+}
+
+@keyframes loader {
+    from {
+        rotate: 0deg;
+    }
+
+    to {
+        rotate: 360deg;
+    }
+}
+
 .link-container .main-heading {
     font-family: 'Permanent Marker', cursive;
     text-align: center;
     font-size: 1.5rem;
+}
+.link-container .main-heading span{
+    text-wrap: nowrap;
 }
 
 .link-container .input-area {
@@ -79,6 +126,10 @@
 .link-container .info {
     text-align: center;
     font-weight: bolder;
+}
+
+.link-container .info span{
+    color: yellow;
 }
 
 @keyframes fadeIn {

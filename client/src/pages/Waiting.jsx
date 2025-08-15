@@ -10,6 +10,8 @@ import './Waiting.css';
 const Waiting = () => {
   const [roomid, setRoomid] = useState(sessionStorage.getItem('room') || '');
   const [path, setPath] = useState('/join_via_link/');
+  const [showqr, setShowqr] = useState(false);
+  const [txt, setTxt] = useState('Genrating The QRCode.')
   const navigate = useNavigate();
   const { socket } = useSocket();
 
@@ -32,7 +34,7 @@ const Waiting = () => {
       try {
         await navigator.share({
           title: "Join My Game",
-          text: "Click the link to join my game!",
+          text: "Click the Invite link to join my game!",
           url: (window.location.origin + path + roomid)
         });
         success("Link shared successfully!");
@@ -65,10 +67,10 @@ const Waiting = () => {
       }
     }, function (er) {
       if (er) {
-        error('QRCode is not Genrating At This Time :( ');
-        console.log(er);
+        setTxt('QRCode is not Genrating At This Time :( ');
         return;
       }
+      setShowqr(true);
     });
 
     socket.on('partnerJoined', () => {
@@ -110,10 +112,13 @@ const Waiting = () => {
           <div className="middle">
             <div className="left-side">
               <div className="gif_area">
-                <canvas id="canvas"></canvas>
-              </div>
-              <div className="shre-btn">
-                <button onClick={handleShareClick}>Share Link</button>
+                <canvas id="canvas" style={{ display: showqr ? '' : 'none' }}></canvas>
+                <div className="loader" style={{ display: showqr ? 'none' : '' }}>
+                  <div className="outer-loader">
+                    <div className="inner-loader"></div>
+                  </div>
+                  <div className="text">{txt}</div>
+                </div>
               </div>
             </div>
             <div className="right-side">
@@ -121,6 +126,14 @@ const Waiting = () => {
                 We waits here for your friend to join the private game. Once both players are connected, the game starts automatically. A simple real-time lobby to begin the match smoothly.
               </div>
               <div className="room-id description">RoomID is : <span onClick={handleClick} className='room-id'>{roomid}</span></div>
+              <div className="btn-area">
+                <div className="shre-btn">
+                  <button onClick={handleShareClick}>Share Link</button>
+                </div>
+                <div className="shre-btn">
+                  <button>Destroy Room</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

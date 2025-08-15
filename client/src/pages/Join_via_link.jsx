@@ -9,6 +9,7 @@ const Join_via_link = () => {
     const [roomid, setRoomId] = useState(id || null);
     const [name, setName] = useState('');
     const [creator, setCreator] = useState('Your Friend');
+    const [show, setShow] = useState(false);
     const { socket, connected } = useSocket();
     const navigate = useNavigate();
 
@@ -37,6 +38,7 @@ const Join_via_link = () => {
 
         socket.on("creator", (name) => {
             setCreator(name);
+            setShow(true);
         });
 
         socket.on('roomNotAvailabel', () => {
@@ -66,6 +68,7 @@ const Join_via_link = () => {
             socket.off('changeName');
             socket.off('getInfo');
             socket.off('RoomJoin');
+            socket.off('not');
         };
     }, [socket, roomid]);
 
@@ -80,16 +83,29 @@ const Join_via_link = () => {
             <div className="link-container">
                 <div className="wrapper">
                     <div className="main-heading">WelCome To <span>Tic-Tac-Toe</span> Game</div>
-                    <div className="info">You Are Invited By {creator}.</div>
-                    <div className="info">(Just Enter Your Name And Click on Join btn You Are Auatomaticaly Joined To Your Friend.)</div>
-                    <div className="input-area">
-                        <input
-                            type="text"
-                            value={name}
-                            placeholder="Enter Your Name"
-                            onInput={e => setName(e.target.value)}
-                        />
-                        <button className="all" onClick={handleClick}>Join</button>
+                    <div className="inner">
+                        {show ? <>
+                            <div className="info">You Are Invited By <span>{creator}</span>.</div>
+                            <div className="info">(Just Enter Your Name And Click on Join btn You Are Automaticaly Joined To <span>{creator}</span>.)</div>
+                            <div className="input-area">
+                                <input
+                                    type="text"
+                                    value={name}
+                                    placeholder="Enter Your Name"
+                                    onInput={e => setName(e.target.value)}
+                                />
+                                <button className="all" onClick={handleClick}>Join</button>
+                            </div>
+                        </>
+                            : <>
+                                <div className="loader">
+                                    <div className="outer-loader">
+                                        <div className="inner-loader"></div>
+                                    </div>
+                                </div>
+                                <div className="valid-link">Please Wait We Validating Your Invite Link.</div>
+                            </>
+                        }
                     </div>
                 </div>
             </div>

@@ -52,7 +52,7 @@
     flex-direction: column;
 }
 
-.waiting-container .left-side .shre-btn button {
+.waiting-container .shre-btn button {
     background: linear-gradient(135deg, #ff7eb3, #ff758c);
     color: white;
     font-size: 14px;
@@ -71,12 +71,51 @@
     width: 250px;
 }
 
+.waiting-container .loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    font-weight: bolder;
+}
+
+.waiting-container .loader .outer-loader {
+    height: 100px;
+    aspect-ratio: 1;
+    border-left: #FF69B4 5px solid;
+    border-top: #8A2BE2 5px solid;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: loader 1.6s infinite linear;
+}
+
+.waiting-container .loader .inner-loader {
+    height: 70px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border-right: #8A2BE2 5px solid;
+    border-bottom: #FF69B4 5px solid;
+    animation: loader 0.7s infinite linear;
+    animation-direction: reverse;
+}
+
 .waiting-container .right-side {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
+    justify-content: space-between;
+}
+
+.waiting-container .right-side .btn-area {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
 }
 
 
@@ -165,7 +204,7 @@
         font-family: sans-serif;
     }
 
-   .waiting-container #canvas {
+    .waiting-container #canvas {
         width: 180px;
     }
 }
