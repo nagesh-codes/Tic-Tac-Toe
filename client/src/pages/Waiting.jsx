@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import cat2 from '../assets/cat2.gif';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useSocket } from '../components/SocketProvider';
 import { error, success } from '../App';
@@ -112,7 +112,7 @@ const Waiting = () => {
           <div className="middle">
             <div className="left-side">
               <div className="gif_area">
-                <canvas id="canvas" style={{ display: showqr ? '' : 'none' }}></canvas>
+                <canvas id="canvas" style={{ display: showqr ? '' : 'none' }} draggable={true}></canvas>
                 <div className="loader" style={{ display: showqr ? 'none' : '' }}>
                   <div className="outer-loader">
                     <div className="inner-loader"></div>
@@ -131,7 +131,7 @@ const Waiting = () => {
                   <button onClick={handleShareClick}>Share Link</button>
                 </div>
                 <div className="shre-btn">
-                  <button>Destroy Room</button>
+                  <Link to={"/"} className='btn'>Destroy Room</Link>
                 </div>
               </div>
             </div>
