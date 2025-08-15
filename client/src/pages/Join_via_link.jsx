@@ -13,7 +13,8 @@ const Join_via_link = () => {
     const { socket, connected } = useSocket();
     const navigate = useNavigate();
 
-    const handleClick = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
         socket.emit('joinRoom', { name, roomid });
     }
 
@@ -83,7 +84,7 @@ const Join_via_link = () => {
             <div className="link-container">
                 <div className="wrapper">
                     <div className="main-heading">WelCome To <span>Tic-Tac-Toe</span> Game</div>
-                    <div className="inner">
+                    <form className="inner" onSubmit={handleSubmit}>
                         {show ? <>
                             <div className="info">You Are Invited By <span>{creator}</span>.</div>
                             <div className="info">(Just Enter Your Name And Click on Join btn You Are Automaticaly Joined To <span>{creator}</span>.)</div>
@@ -92,9 +93,11 @@ const Join_via_link = () => {
                                     type="text"
                                     value={name}
                                     placeholder="Enter Your Name"
-                                    onInput={e => setName(e.target.value)}
+                                    onInput={e => setName(e.target.value.trim())}
+                                    required
+                                    maxLength={6}
                                 />
-                                <button className="all" onClick={handleClick}>Join</button>
+                                <button className="all" type="submit">Join</button>
                             </div>
                         </>
                             : <>
@@ -106,7 +109,7 @@ const Join_via_link = () => {
                                 <div className="valid-link">Please Wait We Validating Your Invite Link.</div>
                             </>
                         }
-                    </div>
+                    </form>
                 </div>
             </div>
         </>
