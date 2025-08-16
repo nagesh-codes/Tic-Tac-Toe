@@ -36,7 +36,7 @@ io.on('connection', (socket) => {
             const id = generateRoomId();
             io.to(socket.id).emit('take-id', id);
         } catch (er) {
-            console.log(er.message);
+            console.error(er.message);
         }
     });
 
@@ -54,7 +54,7 @@ io.on('connection', (socket) => {
                 unique_id: data.roomid.split("").reverse().join(''),
                 createdAt: Date.now(),
                 createBy: socket_ID,
-                game_status: ['', '', '', '', '', '', '', '', '', ''],
+                game_status: ['', '', '', '', '', '', '', '', ''],
                 players: {
                     [socket_ID]: [0, 0, sign],
                 },
@@ -66,7 +66,7 @@ io.on('connection', (socket) => {
             }
             io.to(socket_ID).emit('roomCreated');
         } catch (e) {
-            console.log(e.message)
+            console.error(e.message)
             io.to(socket_ID).emit('serverErr');
         }
     });
@@ -164,7 +164,7 @@ io.on('connection', (socket) => {
             }
 
         } catch (error) {
-            console.log(error.message);
+            console.error(error.message);
         }
     })
 
@@ -285,8 +285,8 @@ io.on('connection', (socket) => {
             let remainingPlayerName;
             Object.keys(players).forEach((pla, ind) => {
                 if (pla !== socket.id) {
-                    if (ind == 0) {
-                        remainingPlayerName = Object.keys(players)[1];
+                    if (ind === 0) {
+                        remainingPlayerName = USERS[Object.keys(players)[1]].name;
                     }
                     io.to(pla).emit('partnerLeft', remainingPlayerName);
                 };
@@ -304,7 +304,7 @@ io.on('connection', (socket) => {
             delete ROOMS[data];
             delete USERS[socket.id];
         } catch (error) {
-            console.log(error.message);
+            console.error(error.message);
         }
     })
 

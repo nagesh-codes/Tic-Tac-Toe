@@ -24,7 +24,8 @@ const Game_home = () => {
   const [showImg, setShowImg] = useState(false);
   const [disCurPla, setDisCurPla] = useState('...')
   const navigate = useNavigate();
-
+  const { id } = useParams();
+  
   const waitForCells = () =>
     new Promise((resolve) => {
       const check = () => {
@@ -126,7 +127,6 @@ const Game_home = () => {
 
   }, [gameStatus]);
 
-  const { id } = useParams();
   useEffect(() => {
     setRoomid(id);
     sessionStorage.setItem('room', id);
@@ -141,7 +141,6 @@ const Game_home = () => {
       warning('first create or join the Room!');
       navigate("/");
     }
-
 
     socket.emit('takeInfo', {
       roomid: sessionStorage.getItem('room'),
