@@ -205,7 +205,7 @@ Typical flow:
 4. Configure the client to reach the deployed server URL if needed (e.g., `VITE_SERVER_URL`).
 
 > If you have a live demo, add it here:
-> - **Live Demo**: https://tic-tac-toe-18le.onrender.com (replace if different)
+> - **Live Demo**: https://tic-tac-toe-18le.onrender.com
 
 ---
 
