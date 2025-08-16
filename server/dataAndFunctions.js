@@ -24,7 +24,7 @@ export let ROOMS = {
     unique_id: "Amoor",
     createdAt: Date.now(),
     createdBy: 'socketID',
-    game_status: ['', '', '', '', '', '', '', '', '', ''],
+    game_status: ['', '', '', '', '', '', '', '', ''],
     players: {
       "userId1": [0, 0, 'O'],
       "userId2": [0, 0, 'X']
