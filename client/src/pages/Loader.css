@@ -1,0 +1,44 @@
+.loader-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 100dvh;
+    width: 100%;
+    background: linear-gradient(135deg, #FF69B4, #8A2BE2);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    backdrop-filter: blur(10px);
+    gap: 20px;
+    z-index: 100000;
+}
+
+.loader-container .outer-loader {
+    height: 100px;
+    aspect-ratio: 1;
+    border-left: #FF69B4 5px solid;
+    border-top: #8A2BE2 5px solid;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: loader 1.6s infinite linear;
+}
+
+.loader-container .inner-loader {
+    height: 70px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border-right: #8A2BE2 5px solid;
+    border-bottom: #FF69B4 5px solid;
+    animation: loader 0.7s infinite linear;
+    animation-direction: reverse;
+}
+
+.loader-container .loader-text {
+    font-weight: bolder;
+    font-size: 1.5rem;
+}

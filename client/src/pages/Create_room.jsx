@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { error, success, warning } from '../App';
 import { useSocket } from '../components/SocketProvider';
 import './Create_room.css'
+import Loader from './Loader';
 
 const Create_room = () => {
     const [roomid, setRoomid] = useState('Generating...');
@@ -10,6 +11,7 @@ const Create_room = () => {
     const [email, setEmail] = useState('');
     const { socket, connected } = useSocket();
     const [staus, setStaus] = useState(true);
+    const [showloader, setShowloader] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -45,6 +47,7 @@ const Create_room = () => {
 
     const handleForm = (e) => {
         e.preventDefault();
+        setShowloader(true);
         socket.emit('createRoom', { roomid, name, email });
     };
 
@@ -73,6 +76,7 @@ const Create_room = () => {
     return (
         <>
             <div className="create-container">
+                {showloader ? <Loader text='Creating Your Private Game Room' /> : ''}
                 <div className="wrapper">
                     <div className="main-heading">
                         <h1>Create The Private Room</h1>

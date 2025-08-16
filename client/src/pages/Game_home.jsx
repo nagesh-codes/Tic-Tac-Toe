@@ -6,6 +6,7 @@ import winning from '../assets/winning.gif';
 import lose from '../assets/lose.gif';
 import Draw from '../assets/draw.gif';
 import './Game_home.css';
+import Loader from './Loader';
 
 const Game_home = () => {
   const [roomid, setRoomid] = useState(sessionStorage.getItem('room') || 'Room ID');
@@ -24,8 +25,10 @@ const Game_home = () => {
   const [showImg, setShowImg] = useState(false);
   const [disCurPla, setDisCurPla] = useState('...')
   const navigate = useNavigate();
+  const [showloader, setShowloader] = useState(false);
+  const [loadtext, setLoadtext] = useState('');
   const { id } = useParams();
-  
+
   const waitForCells = () =>
     new Promise((resolve) => {
       const check = () => {
@@ -100,10 +103,14 @@ const Game_home = () => {
   };
 
   const handleReset = () => {
+    setLoadtext('Reseting The Game.')
+    setShowloader(true);
     socket.emit('resetGame', { roomid });
   }
 
   const handleRestart = () => {
+    setLoadtext('Restarting The Game.')
+    setShowloader(true);
     socket.emit('resetGame', { roomid, restart: true });
   }
 
@@ -188,6 +195,7 @@ const Game_home = () => {
         cell.textContent = '';
       });
       setShowImg(false);
+      setShowloader(false);
       success('Game has been reset!');
       updateGameStatus(data);
     });
@@ -230,6 +238,7 @@ const Game_home = () => {
   return (
     <>
       <div className="game-home-container">
+        {showloader ? <Loader text={loadtext} /> : ''}
         <div className="wrapper">
           <div className="left-panel">
             <h1>Tic-Tac-Toe Fun!</h1>

@@ -4,12 +4,14 @@ import { useSocket } from '../components/SocketProvider';
 import { useEffect } from 'react';
 import { error, success, warning } from '../App';
 import "./Join_room.css"
+import Loader from './Loader';
 
 const Entry = () => {
   const { id } = useParams();
   const [roomid, setRoomid] = useState(id || '');
   const [name, setName] = useState('');
   const { socket, connected } = useSocket();
+  const [showloader, setShowloader] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,7 +24,7 @@ const Entry = () => {
     socket.on('RoomJoin', () => {
       socket.emit('takeInfo', { roomid });
     });
-    
+
     socket.on('getInfo', (data) => {
       sessionStorage.setItem('player', data.pl2);
       sessionStorage.setItem('room', roomid);
@@ -46,11 +48,13 @@ const Entry = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setShowloader(true);
     socket.emit('joinRoom', { name, roomid });
   }
   return (
     <>
       <div className="join-container">
+        {showloader ? <Loader text='Joining The Private Game Room' /> : ''}
         <div className="wrapper">
           <div className="main-heading">
             <h1>Join The Private Room</h1>
