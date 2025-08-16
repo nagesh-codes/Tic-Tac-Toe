@@ -5,6 +5,7 @@ import { useSocket } from '../components/SocketProvider';
 import { error, success } from '../App';
 import QRCode from 'qrcode';
 import './Waiting.css';
+import Loader from './Loader';
 
 const Waiting = () => {
   const [roomid, setRoomid] = useState(sessionStorage.getItem('room') || '');
@@ -13,6 +14,7 @@ const Waiting = () => {
   const [txt, setTxt] = useState('Genrating The QRCode.')
   const navigate = useNavigate();
   const { socket } = useSocket();
+  const [showloader, setShowloader] = useState(false);
 
   const handleClick = () => {
     if (navigator && navigator.clipboard) {
@@ -29,7 +31,8 @@ const Waiting = () => {
   }
 
   const handleDestroy = () => {
-    socket.emit('destroyRoom',roomid);
+    setShowloader(true);
+    socket.emit('destroyRoom', roomid);
   }
 
   const handleShareClick = async () => {
@@ -108,6 +111,7 @@ const Waiting = () => {
   return (
     <>
       <div className="waiting-container">
+        {showloader ? <Loader text='Destroying Your Private Game Room.' /> : ''}
         <div className="wrapper">
           <div className="main-heading">
             Waiting For Your Game Partner!

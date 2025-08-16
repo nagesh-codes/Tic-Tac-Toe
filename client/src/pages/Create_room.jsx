@@ -47,6 +47,10 @@ const Create_room = () => {
 
     const handleForm = (e) => {
         e.preventDefault();
+        if (roomid === 'Generating...') {
+            error('Roomid Is Not Generated, Please Wait!');
+            return;
+        }
         setShowloader(true);
         socket.emit('createRoom', { roomid, name, email });
     };
