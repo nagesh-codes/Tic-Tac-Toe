@@ -5,7 +5,8 @@ dotenv.config();
 
 export let USERS = {};
 /*
-sample! how players data will be save in USERS object
+sample! 
+how players data will be save in USERS object
 export let USERS = {
   socketID: {
       name: "Alice",
@@ -18,7 +19,8 @@ export let USERS = {
 
 export let ROOMS = {};
 /*
-sample! how rooms data will be stored in ROOMS object
+sample! 
+how rooms data will be stored in ROOMS object
 export let ROOMS = {
   "roomA": {
     unique_id: "Amoor",
@@ -72,6 +74,9 @@ export const roomDeletion = () => {
     Object.values(ROOMS).map((val) => {
       if ((Date.now() - val.createdAt) >= (2 * 60 * 60 * 1000)) {
         sendMail(USERS[val.createdBy]);
+        Object.keys(val.players).forEach((id) => {
+          delete USERS[id];
+        });
         delete ROOMS[val.unique_id.split('').reverse().join('')];
       }
     });

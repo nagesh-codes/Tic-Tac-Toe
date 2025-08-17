@@ -3,6 +3,7 @@ import { Server } from 'socket.io'
 import http from 'http'
 import cors from 'cors'
 import dotenv from 'dotenv'
+import cron from "node-cron";
 import { addPlayer, checkWin, generateRoomId, roomDeletion, ROOMS, USERS } from './dataAndFunctions.js'
 
 dotenv.config();
@@ -29,8 +30,6 @@ app.get('/ping', (req, res) => {
 })
 
 io.on('connection', (socket) => {
-    roomDeletion();
-
     socket.on('get-id', () => {
         try {
             const id = generateRoomId();
@@ -322,6 +321,10 @@ io.on('connection', (socket) => {
         }
     })
 
+});
+
+cron.schedule("*/5 * * * *", () => {
+    roomDeletion();
 });
 
 server.listen(port, '0.0.0.0', () => { console.log(`server started on port:${port}`) });
