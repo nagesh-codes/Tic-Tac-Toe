@@ -57,7 +57,7 @@ const Waiting = () => {
       navigate("/");
     }
 
-    if (sessionStorage.getItem('player') && sessionStorage.getItem('room')) {
+    if (sessionStorage.getItem('player') && sessionStorage.getItem('room') && !sessionStorage.getItem('wait')) {
       navigate(`/game_home/${sessionStorage.getItem('room')}`);
     }
 
@@ -83,7 +83,7 @@ const Waiting = () => {
       socket.emit('takeInfo', { roomid: sessionStorage.getItem('room') });
     });
 
-    socket.emit('takeInfo', { roomid: sessionStorage.getItem('room') });
+    socket.emit('takeInfo', { roomid: sessionStorage.getItem('room'), name: sessionStorage.getItem('player') });
 
     socket.on('getInfo', (data) => {
       if (data.isMatchStart) {

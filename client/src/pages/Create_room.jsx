@@ -15,6 +15,10 @@ const Create_room = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        sessionStorage.setItem('player', name);
+    }, [name])
+
+    useEffect(() => {
         if (!socket && !connected) {
             setRoomid('Generating...');
             statusOfServer();
@@ -35,6 +39,7 @@ const Create_room = () => {
         });
 
         socket.on('serverErr', () => {
+            setShowloader(false);
             error('Internal Server Error');
         });
 

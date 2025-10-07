@@ -28,6 +28,7 @@ const Game_home = () => {
   const [showloader, setShowloader] = useState(false);
   const [loadtext, setLoadtext] = useState('');
   const { id } = useParams();
+  sessionStorage.setItem('wait', false);
 
   const waitForCells = () =>
     new Promise((resolve) => {
