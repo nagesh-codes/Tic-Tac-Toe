@@ -17,9 +17,15 @@ const Entry = () => {
   useEffect(() => {
     if (!socket && !connected) return;
 
-    socket.on('roomNotAvailabel', () => { error('Such Room Is Not Available.') });
+    socket.on('roomNotAvailabel', () => { 
+      setShowloader(false);
+      error('Such Room Is Not Available.'); 
+    });
 
-    socket.on('serverErr', () => { error('Internal Server Error') });
+    socket.on('serverErr', () => { 
+      setShowloader(false);
+      error('Internal Server Error'); 
+    });
 
     socket.on('RoomJoin', () => {
       socket.emit('takeInfo', { roomid });
@@ -33,6 +39,7 @@ const Entry = () => {
     })
 
     socket.on('changeName', () => {
+      setShowloader(false);
       warning('This Name Is Already Taken By Room Creator, Please Choose Another Name');
     });
 

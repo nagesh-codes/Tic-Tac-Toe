@@ -152,12 +152,12 @@ io.on('connection', (socket) => {
         try {
             const room = ROOMS[dt];
             if (!room) {
-                io.to(socket.id).emit('noRoom');
+                io.to(socket.id).emit('roomNotAvailabel');
                 return;
             }
             const creatorName = USERS[room.createBy].name;
             if (room.isMatchStart) {
-                io.to(socket.id).emit('not');
+                io.to(socket.id).emit('roomNotAvailabel');
             } else {
                 io.to(socket.id).emit('creator', creatorName);
             }

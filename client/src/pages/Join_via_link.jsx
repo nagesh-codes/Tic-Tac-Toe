@@ -15,6 +15,7 @@ const Join_via_link = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setShowloader(true);
         socket.emit('joinRoom', { name, roomid });
     }
 
@@ -27,15 +28,6 @@ const Join_via_link = () => {
         if (!socket) { return };
 
         sessionStorage.setItem("room", roomid);
-        socket.on("noRoom", () => {
-            error("That room is not available :(");
-            navigate("/");
-        });
-
-        socket.on('not', () => {
-            error("That room is not available :(");
-            navigate("/");
-        })
 
         socket.on("creator", (name) => {
             setCreator(name);
@@ -48,6 +40,7 @@ const Join_via_link = () => {
         });
 
         socket.on('changeName', () => {
+            setShowloader(false);
             warning('This Name Is Already Taken By Room Creator, Please Choose Another Name');
         });
 
@@ -63,13 +56,11 @@ const Join_via_link = () => {
         })
 
         return () => {
-            socket.off("noRoom");
             socket.off("creator");
             socket.off('roomNotAvailabel');
             socket.off('changeName');
             socket.off('getInfo');
             socket.off('RoomJoin');
-            socket.off('not');
         };
     }, [socket, roomid]);
 
