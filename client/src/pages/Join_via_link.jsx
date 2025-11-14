@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { error, success, warning } from "../App";
 import { useSocket } from "../components/SocketProvider";
 import './Join_via_link.css'
+import Loader from "./Loader";
 
 const Join_via_link = () => {
     const { id } = useParams();
@@ -10,6 +11,7 @@ const Join_via_link = () => {
     const [name, setName] = useState('');
     const [creator, setCreator] = useState('Your Friend');
     const [show, setShow] = useState(false);
+    const [showloader, setShowloader] = useState(false);
     const { socket, connected } = useSocket();
     const navigate = useNavigate();
 
@@ -73,6 +75,7 @@ const Join_via_link = () => {
     return (
         <>
             <div className="link-container">
+                {showloader ? <Loader text='Joining The Private Game Room' /> : ''}
                 <div className="wrapper">
                     <div className="main-heading">WelCome To <span>Tic-Tac-Toe</span> Game</div>
                     <form className="inner" onSubmit={handleSubmit}>
