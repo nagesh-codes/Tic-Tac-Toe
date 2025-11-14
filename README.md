@@ -44,11 +44,8 @@ A modern Tic‑Tac‑Toe game with real‑time multiplayer using **Socket.IO**, 
 - **Instant state sync**: Moves update simultaneously for both players.
 - **Win/Draw handling**: Detects results and surfaces status messages.
 - **Restart & reset**: Quickly start a new round with the same players.
-- **Optional timeout**: Auto‑forfeit a turn after inactivity (if enabled).
 - **Responsive UI**: Play comfortably on desktop or mobile.
 - **Clear notifications**: Success/warning/error toasts for key events.
-
-> Tip: Add screenshots/GIFs under `client/src/assets/` and update the banner path above.
 
 ---
 
